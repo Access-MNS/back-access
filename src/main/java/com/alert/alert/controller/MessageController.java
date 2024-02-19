@@ -1,61 +1,54 @@
 package com.alert.alert.controller;
 
-import com.alert.alert.model.Message;
-import com.alert.alert.repository.MessageRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
+import com.alert.alert.entities.Message;
+import com.alert.alert.service.impl.MessageServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/")
-public class MessagesController {
+public class MessageController {
 
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private MessageRepository messageRepository;
+    private final MessageServiceImpl messageService;
 
-    public MessagesController(MessageRepository messageRepository) {
-        this.messageRepository = messageRepository;
+    public MessageController(MessageServiceImpl messageService) {
+        this.messageService = messageService;
     }
 
-    @RequestMapping("/messages")
+    @GetMapping("/messages")
     Collection<Message> messages() {
-        return (Collection<Message>) messageRepository.findAll();
+        return messageService.getMessages();
     }
 
-    @RequestMapping("/messages/{id}")
-    ResponseEntity<?> getMessage(@PathVariable Long id) {
-        Optional<Message> messages = messageRepository.findById(id);
-        return messages.map(response -> ResponseEntity.ok().body(response))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    @GetMapping("/messages/{id}")
+    ResponseEntity<Message> getMessage(@PathVariable Long id) {
+        Message message = messageService.getMessage(id);
+        return message != null
+                ? ResponseEntity.ok(message)
+                : ResponseEntity.notFound().build();
     }
 
     @PostMapping("/messages")
-    ResponseEntity<Message> createMessage(@Validated @RequestBody Message messages) throws URISyntaxException {
-        logger.info("New message : {}", messages);
-        Message result = messageRepository.save(messages);
-        return ResponseEntity.created(new URI("/api/message" + result.getId()))
-              .body(result);
+    ResponseEntity<Message> createMessage(@Validated @RequestBody Message messages) {
+        return messageService.createMessage(messages)
+                ? ResponseEntity.ok(messages)
+                : ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("messages/{id}")
+    @PutMapping("messages")
     ResponseEntity<Message> updateMessage(@Validated @RequestBody Message messages) {
-        logger.info("Updating message {}", messages);
-        Message result = messageRepository.save(messages);
-        return ResponseEntity.ok().body(result);
+        return messageService.updateMessage(messages)
+                ? ResponseEntity.ok(messages)
+                : ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("messages/{id}")
-    public ResponseEntity<?> deleteMessage(@PathVariable Long id) {
-        logger.info("Deleting message {}", id);
-        messageRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Message> deleteMessage(@PathVariable Long id) {
+        return messageService.deleteMessage(id)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 }
