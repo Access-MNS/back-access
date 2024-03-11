@@ -11,6 +11,13 @@ public interface ChannelService {
     Collection<Channel> getChannels();
     Channel getChannel(@PathVariable Long id);
     boolean createChannel(@Validated @RequestBody Channel channel);
+
+    boolean addUserToChannel(@Validated @PathVariable Long userId, Long channelId);
+    public boolean updateUserFromChannel(@Validated
+                                         @PathVariable Long userId, Long channelId,
+                                         @RequestBody
+                                         boolean canEdit, boolean canDelete, boolean canView, boolean canInvite);
+    boolean removeUserFromChannel(@Validated @PathVariable Long userId, Long channelId);
     boolean updateChannel(@Validated @RequestBody Channel channel);
     boolean deleteChannel(@PathVariable Long id);
 }

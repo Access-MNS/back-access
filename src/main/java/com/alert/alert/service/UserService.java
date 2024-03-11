@@ -10,7 +10,6 @@ import java.util.Collection;
 public interface UserService {
     Collection<User> getUsers();
     User getUser(@PathVariable Long id);
-    boolean createUser(@Validated @RequestBody User user);
     boolean updateUser(@Validated @RequestBody User user);
     boolean deleteUser(@PathVariable Long id);
 }

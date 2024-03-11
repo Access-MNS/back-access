@@ -1,49 +1,63 @@
 package com.alert.alert.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.*;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "channels")
-public class Channel {
+public class Channel extends Auditable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
+
     private String description;
 
-    @ManyToMany(mappedBy = "channels")
-    private Set<User> users;
+    @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<ChannelsUsers> users = new ArrayList<>();
 
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) @JsonIgnore
     @JoinColumn(name = "parent_channel_id", referencedColumnName = "id")
     private Channel parentChannelId;
 
-    @OneToMany(mappedBy = "parentChannelId", cascade = CascadeType.ALL)
-    private Set<Channel> childChannelsId;
+    @OneToMany(mappedBy = "parentChannelId") @JsonIgnore
+    private Set<Channel> childChannelsId = new HashSet<>();
 
-    @CreatedDate @CreationTimestamp
-    private LocalDateTime createdOn;
-    @CreatedBy
-    private String createdBy;
-    @LastModifiedDate @CreationTimestamp
-    private LocalDateTime lastModifiedOn;
-    @LastModifiedBy
-    private String lastModifiedBy;
+    public void addChannelUser(User user, boolean canEdit, boolean canDelete, boolean canView, boolean canInvite) {
+
+        ChannelsUsers channelsUsers = new ChannelsUsers(this, user);
+        updateProperties(channelsUsers, canEdit, canDelete, canView, canInvite);
+        users.add(channelsUsers);
+    }
+
+    public void removeChannelUser(User user) {
+        for (Iterator<ChannelsUsers> iterator = users.iterator();
+             iterator.hasNext(); ) {
+            ChannelsUsers channelsUsers = iterator.next();
+
+            if(channelsUsers.user().equals(user)
+                    && channelsUsers.channel().equals(this)) {
+                iterator.remove();
+                channelsUsers.channel(null);
+                channelsUsers.user(null);
+            }
+        }
+    }
+
+    public void updateProperties(ChannelsUsers channelsUsers,
+                                 boolean canEdit, boolean canDelete, boolean canView, boolean canInvite) {
+        channelsUsers
+                .canInvite(canInvite)
+                .canDelete(canDelete)
+                .canEdit(canEdit)
+                .canView(canView);
+    }
 }

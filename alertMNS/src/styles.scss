@@ -1,0 +1,62 @@
+$primary: #C08552;
+$primary-60: rgba(192, 133, 82, 0.6);
+$secondary: #0E273C;
+$secondary-60: rgba(14, 39, 60, 0.6);
+$tertiary: #A7B0CA;
+$tertiary-60: rgba(167, 176, 202, 0.6);
+$tertiary-30: rgba(167, 176, 202, 0.6);
+$background: #F2F2F2;
+$annotation: #6D1A36;
+$annotation-60: rgba(109, 26, 54, 0.6);
+
+$text: #232323;
+$text-grey: rgba(35, 35, 35, 0.6);
+
+
+html, body{
+  overflow: hidden;
+}
+
+.row{
+  --bs-gutter-x: 0;
+}
+.card{
+  --bs-card-bg: #{$background};
+  border-radius: 0;
+  --bs-card-spacer-y: 3rem;
+  --bs-card-spacer-x: 3rem;
+}
+
+.card-body{
+  padding: 20px 60px;
+}
+
+input, input:focus{
+  border: 1px solid #{$primary};
+}
+input:focus{
+  box-shadow: 0 0 0 0.20rem #{$primary-60};
+}
+
+.btn-primary{
+  --bs-btn-bg: #{$primary};
+  --bs-btn-border-color: #{$primary};
+  --bs-btn-hover-bg: #{$primary-60};
+  --bs-btn-hover-border-color: #{$primary-60};
+}
+
+p{
+  color: #{$text};
+  font-weight: normal;
+  font-size: 15px;
+  margin: 0 0 0;
+  padding: 0 0 0.5rem;
+}
+
+a:link, a:visited{
+  font-weight: bold;
+  color: #{$text};
+}
+a:hover, a:active{
+  color: #{$text-grey};
+}

@@ -3,13 +3,15 @@ package com.alert.alert.controller;
 import com.alert.alert.entities.Message;
 import com.alert.alert.service.impl.MessageServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/v1")
+@PreAuthorize("hasAnyRole('ADMIN','USER')")
 public class MessageController {
 
     private final MessageServiceImpl messageService;

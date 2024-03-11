@@ -1,0 +1,45 @@
+version: '3'
+services:
+  db:
+    image: mysql:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: alert
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_PASSWORD: root
+      PMA_USER: root
+    depends_on:
+      - db
+    ports:
+      - "8181:80"
+
+  backend:
+    depends_on:
+      - db
+    image: alertmns:latest
+    environment:
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/alert
+      JWT_SECRET_KEY: 586B633834416E396D7436753879382F423F4428482B4C6250655367566B5970
+      JWT_EXPIRATION: 90000
+      JWT_COOKIE_NAME: jwt-cookie
+      JWT_REFRESH_TOKEN_EXPIRATION: 1296000000
+      JWT_REFRESH_TOKEN_COOKIE_NAME: refresh-jwt_cookie
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data: {}

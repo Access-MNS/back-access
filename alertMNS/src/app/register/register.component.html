@@ -1,0 +1,99 @@
+<div class="row vw-100 vh-100">
+  <div class="col-sm-8 background">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <div class="card col-sm-4">
+      <canvas riv="login_screen_character" width="1000" height="1000">
+          <riv-animation name="idle" play></riv-animation>
+      </canvas>
+      <div class="card-body">
+          <p class="card-title">Vous avez déja un compte ? <a href="/login">Connectez-vous</a></p>
+          <div class="alert alert-danger" *ngIf="errorMessage">
+              <p>{{errorMessage}}</p>
+          </div>
+          <form #formRegister="ngForm" (ngSubmit)="onSubmitRegister(formRegister)">
+              <div class="mb-3">
+                  <input
+                          type="text"
+                          class="form-control"
+                          id="firstname"
+                          placeholder="Prénom"
+                          ngModel
+                          #firstname="ngModel"
+                          name="firstname"
+                          required>
+                  <div *ngIf="firstname.errors && formRegister.submitted" class="text-danger">
+                      Prénom obligatoire !
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <input
+                          type="text"
+                          class="form-control"
+                          id="lastname"
+                          placeholder="Nom"
+                          ngModel
+                          #lastname="ngModel"
+                          name="lastname"
+                          required>
+                  <div *ngIf="lastname.errors && formRegister.submitted" class="text-danger">
+                      Nom obligatoire !
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <input
+                          type="email"
+                          class="form-control"
+                          id="email"
+                          placeholder="Email Address"
+                          ngModel
+                          #email="ngModel"
+                          name="email"
+                          required
+                          email>
+                  <div *ngIf="email.errors && formRegister.submitted" class="text-danger">
+                      Email is required!
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <input
+                          type="password"
+                          class="form-control"
+                          id="password"
+                          placeholder="Password"
+                          ngModel
+                          #password="ngModel"
+                          name="password"
+                          required
+                          minlength="6">
+                  <div *ngIf="password.errors && formRegister.submitted" class="text-danger">
+                      <div *ngIf="password.errors['required']">Mot de passe obligatoire</div>
+                      <div *ngIf="password.errors['minlength']" >
+                          Le mot de passe doit contenir au moins 6 caractères.
+                      </div>
+                  </div>
+              </div>
+              <button  type="submit" class="btn btn-primary w-100">Inscription</button>
+          </form>
+      </div>
+  </div>
+</div>

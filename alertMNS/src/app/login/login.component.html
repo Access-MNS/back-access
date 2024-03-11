@@ -1,0 +1,73 @@
+<div class="row vw-100 vh-100">
+  <div class="col-sm-8 background">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <div class="col-sm-4">
+    <div class="card vh-100">
+      <div class="card-body">
+        <p class="card-title">Pas encore de compte ? <a href="/register">Créez-en un !</a></p>
+        <div class="alert alert-danger" *ngIf="errorMessage">
+          <p>{{errorMessage}}</p>
+        </div>
+        <form #formLogin="ngForm" (ngSubmit)="onSubmitLogin(formLogin)">
+          <div class="mb-3">
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="Email Address"
+              ngModel
+              #email="ngModel"
+              name="email"
+              required
+              email>
+            <div *ngIf="email.errors && formLogin.submitted" class="text-danger">
+              Email is required!
+            </div>
+          </div>
+          <div class="mb-3">
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="Password"
+              ngModel
+              #password="ngModel"
+              name="password"
+              required
+              minlength="6">
+            <div *ngIf="password.errors && formLogin.submitted" class="text-danger">
+              <div *ngIf="password.errors['required']">Password is required</div>
+              <div *ngIf="password.errors['minlength']" >
+                Password must be at least 6 characters
+              </div>
+            </div>
+            <p>
+              <br><a href="#">Mot de passe oublié</a>
+            </p>
+          </div>
+          <button  type="submit" class="btn btn-primary w-100">Se connecter</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

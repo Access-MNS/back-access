@@ -3,13 +3,15 @@ package com.alert.alert.controller;
 import com.alert.alert.entities.User;
 import com.alert.alert.service.impl.UserServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/v1")
+@PreAuthorize("hasAnyRole('ADMIN','USER')")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -29,13 +31,6 @@ public class UserController {
         return user != null
                 ? ResponseEntity.ok().body(user)
                 : ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/users")
-    ResponseEntity<User> createUser(@Validated @RequestBody User user) {
-        return userService.createUser(user)
-                ? ResponseEntity.ok(user)
-                : ResponseEntity.badRequest().body(user);
     }
 
     @PutMapping("users")
