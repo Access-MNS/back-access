@@ -33,10 +33,10 @@ public class MessageController {
                 : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/messages")
-    ResponseEntity<Message> createMessage(@Validated @RequestBody Message messages) {
-        return messageService.createMessage(messages)
-                ? ResponseEntity.ok(messages)
+    @PostMapping("/messages/{channelId}")
+    ResponseEntity<Message> createMessage(@Validated @RequestBody Message message, @PathVariable Long channelId) {
+        return messageService.createMessage(message, channelId)
+                ? ResponseEntity.ok(message)
                 : ResponseEntity.badRequest().build();
     }
 

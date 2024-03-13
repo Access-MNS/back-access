@@ -7,7 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -32,6 +34,9 @@ public class User extends Auditable implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToMany(mappedBy = "sentTo")
+    private Set<Message> gotMessage = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

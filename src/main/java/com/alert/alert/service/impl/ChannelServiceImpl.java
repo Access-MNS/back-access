@@ -1,28 +1,33 @@
 package com.alert.alert.service.impl;
 
-import static com.alert.alert.exceptions.UserErrors.*;
-import static com.alert.alert.exceptions.ChannelErrors.*;
-import com.alert.alert.repositories.ChannelRepository;
-import com.alert.alert.service.ChannelService;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 import com.alert.alert.entities.Channel;
 import com.alert.alert.entities.User;
-import org.slf4j.LoggerFactory;
-import java.util.Collection;
+import com.alert.alert.repositories.ChannelRepository;
+import com.alert.alert.repositories.ChannelsUsersRepository;
+import com.alert.alert.repositories.UserRepository;
+import com.alert.alert.service.ChannelService;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class ChannelServiceImpl implements ChannelService {
 
     private final Logger logger = LoggerFactory.getLogger(ChannelServiceImpl.class);
+    private final ChannelsUsersRepository channelsUsersRepository;
     private final ChannelsUsersServiceImpl channelsUsersService;
     private final ChannelRepository channelRepository;
+    private final UserRepository userRepository;
     private final UserServiceImpl userService;
 
-    public ChannelServiceImpl(ChannelRepository channelRepository, ChannelsUsersServiceImpl channelsUsersService, UserServiceImpl userService) {
+    public ChannelServiceImpl(ChannelsUsersRepository channelsUsersRepository, ChannelRepository channelRepository, ChannelsUsersServiceImpl channelsUsersService, UserRepository userRepository, UserServiceImpl userService) {
+        this.channelsUsersRepository = channelsUsersRepository;
         this.channelsUsersService = channelsUsersService;
         this.channelRepository = channelRepository;
+        this.userRepository = userRepository;
         this.userService = userService;
     }
 
@@ -130,5 +135,41 @@ public class ChannelServiceImpl implements ChannelService {
         }
 
         return false;
+    }
+
+    private boolean channelExists (Long id) {
+        if (!channelRepository.existsById(id)) {
+            logger.info("Channel {} does not exist", id);
+            return false;
+        }
+        logger.info("Channel {} already exists: ", id);
+        return true;
+    }
+
+    private boolean parentChannelExists(Long id) {
+        if(!channelRepository.existsById(id)) {
+            logger.info("Channel {} does not exist: ", id);
+            return false;
+        }
+        logger.info("Channel {} already exists: ", id);
+        return true;
+    }
+
+    private boolean channelUserExists(Long userId, Long channelId) {
+        if(!channelsUsersRepository.existsByUserIdAndChannelId(userId, channelId)){
+            logger.info("User {} not in channel {}", userId, channelId);
+            return false;
+        }
+        logger.info("User {} already exists in channel {}", userId, channelId);
+        return true;
+    }
+
+    private boolean userExists(Long id) {
+        if(!userRepository.existsById(id)) {
+            logger.info("User {} not found", id);
+            return false;
+        }
+        logger.info("User {} already exists", id);
+        return true;
     }
 }

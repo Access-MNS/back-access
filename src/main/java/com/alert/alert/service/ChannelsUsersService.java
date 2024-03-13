@@ -1,12 +1,13 @@
 package com.alert.alert.service;
 
 import com.alert.alert.entities.ChannelsUsers;
+import com.alert.alert.entities.User;
 
-import java.util.Collection;
+import java.util.Set;
 
 public interface ChannelsUsersService {
 
-    Collection<ChannelsUsers> getChannelsUsers();
-
     ChannelsUsers getChannelUser(Long userId, Long channelId);
+
+    Set<User> getUsers(Long channelId);
 }

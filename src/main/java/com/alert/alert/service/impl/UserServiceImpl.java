@@ -1,12 +1,11 @@
 package com.alert.alert.service.impl;
 
-import static com.alert.alert.exceptions.UserErrors.*;
-import com.alert.alert.repositories.UserRepository;
-import org.springframework.stereotype.Service;
-import com.alert.alert.service.UserService;
 import com.alert.alert.entities.User;
-import org.slf4j.LoggerFactory;
+import com.alert.alert.repositories.UserRepository;
+import com.alert.alert.service.UserService;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
@@ -57,5 +56,14 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    private boolean userExists(Long id) {
+        if(!userRepository.existsById(id)) {
+            logger.info("User {} not found", id);
+            return false;
+        }
+        logger.info("User {} already exists", id);
+        return true;
     }
 }

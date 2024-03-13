@@ -6,18 +6,20 @@ import com.alert.alert.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import java.util.Collection;
-import java.util.Optional;
 
-import static com.alert.alert.exceptions.MessageErrors.messageExists;
+import java.util.Collection;
 
 @Service
 public class MessageServiceImpl implements MessageService {
 
     private final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
+    private final ChannelServiceImpl channelService;
+    private final ChannelsUsersServiceImpl channelsUsersService;
     private final MessageRepository messageRepository;
 
-    public MessageServiceImpl(MessageRepository messageRepository) {
+    public MessageServiceImpl(ChannelServiceImpl channelService, ChannelsUsersServiceImpl channelsUsersService, MessageRepository messageRepository) {
+        this.channelService = channelService;
+        this.channelsUsersService = channelsUsersService;
         this.messageRepository = messageRepository;
     }
 
@@ -28,18 +30,19 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message getMessage(Long id) {
-        Optional<Message> message = messageRepository.findById(id);
-        return message
+        return messageRepository.findById(id)
                 .orElse(null);
     }
 
     @Override
-    public boolean createMessage(Message messages) {
+    public boolean createMessage(Message message, Long channelId) {
 
-        if (!messageExists(messages.getId())) {
+        if (!messageExists(message.getId())) {
 
-            messageRepository.save(messages);
-            logger.info("Creating message {}", messages);
+            message.setChannel(channelService.getChannel(channelId))
+                    .setSentTo(channelsUsersService.getUsers(channelId));
+            messageRepository.save(message);
+            logger.info("Creating message {} in channel {}", message, channelId);
             return true;
         }
 
@@ -61,15 +64,32 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public boolean deleteMessage(Long id) {
-
         if (messageExists(id)) {
 
-            logger.info("Deleting message {}", id);
-            messageRepository.deleteById(id);
+            Message message = getMessage(id);
+            message
+                    .setChannel(message.getChannel())
+                    .setSender(message.getSender())
+                    .setAction(message.getAction())
+                    .setComment(message.getComment())
+                    .setDeleted(true)
+                    .setSentTo(null);
+            updateMessage(message);
+            logger.info("Message {} now marked as deleted", id);
 
             return true;
         }
 
         return false;
+    }
+
+    private boolean messageExists(Long id) {
+        if (!messageRepository.existsById(id)) {
+            logger.error("Message not found.");
+            return false;
+        }
+        logger.error("Message already exists.");
+
+        return true;
     }
 }
