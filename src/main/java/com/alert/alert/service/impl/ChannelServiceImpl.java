@@ -45,33 +45,25 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public boolean createChannel(Channel channel) {
+    public Channel createChannel(Channel channel) {
         if (!channelExists(channel.getId())
                 && (channel.getParentChannelId() == null
                     || parentChannelExists(channel.getParentChannelId().getId()))) {
 
             channel.addChannelUser(userService.getUser(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()),
                     true, true, true, true);
-            channelRepository.save(channel);
             logger.info("Creating channel {}", channel);
 
-            return true;
+            return channelRepository.save(channel);
         }
-
-        return false;
+        return null;
     }
 
     @Override
-    public boolean updateChannel(Channel channel) {
-        if (channelExists(channel.getId())){
-
-            channelRepository.save(channel);
-            logger.info("Updating channel {}", channel);
-
-            return true;
-        }
-
-        return false;
+    public Channel updateChannel(Channel channel) {
+        return channelExists(channel.getId())
+                ? channelRepository.save(channel)
+                : null;
     }
 
     @Override
@@ -105,7 +97,7 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public boolean updateUserFromChannel(Long userId, Long channelId,
+    public Channel updateUserFromChannel(Long userId, Long channelId,
                                          boolean canEdit, boolean canDelete, boolean canView, boolean canInvite){
 
         if (channelExists(channelId) && userExists(userId)){
@@ -113,13 +105,12 @@ public class ChannelServiceImpl implements ChannelService {
             Channel channel = getChannel(channelId);
             channel.updateProperties(channelsUsersService.getChannelUser(userId, channelId),
                     canEdit, canDelete, canView, canInvite);
-            channelRepository.save(channel);
-            logger.info("Adding user {} to channel {}", userId, channelId);
 
-            return true;
+            logger.info("Adding user {} to channel {}", userId, channelId);
+            return channelRepository.save(channel);
         }
 
-        return false;
+        return null;
     }
 
     @Override

@@ -29,37 +29,45 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public Collection<Message> getMessagesDeleted() {
+        return messageRepository.getMessagesByIsDeletedIsTrue();
+    }
+
+    @Override
+    public Collection<Message> getMessagesNotSeen(Long userId) {
+        return messageRepository.getMessagesNotSeenByUserId(userId);
+    }
+
+    @Override
+    public Collection<Message> getMessagesInChannel(Long id) {
+        return messageRepository.getMessagesByChannel_Id(id);
+    }
+
+    @Override
     public Message getMessage(Long id) {
         return messageRepository.findById(id)
                 .orElse(null);
     }
 
     @Override
-    public boolean createMessage(Message message, Long channelId) {
-
+    public Message createMessage(Message message, Long channelId) {
         if (!messageExists(message.getId())) {
 
             message.setChannel(channelService.getChannel(channelId))
                     .setSentTo(channelsUsersService.getUsers(channelId));
-            messageRepository.save(message);
             logger.info("Creating message {} in channel {}", message, channelId);
-            return true;
+
+            return messageRepository.save(message);
         }
 
-    return false;
+    return null;
     }
 
     @Override
-    public boolean updateMessage(Message messages) {
-        if (messageExists(messages.getId())) {
-
-            logger.info("Updating message {}", messages);
-            messageRepository.save(messages);
-
-            return true;
-        }
-
-        return false;
+    public Message updateMessage(Message messages) {
+        return messageExists(messages.getId())
+                ? messageRepository.save(messages)
+                : null;
     }
 
     @Override

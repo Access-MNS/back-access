@@ -1,9 +1,9 @@
 package com.alert.alert.service.impl;
 
-import com.alert.alert.exceptions.TokenException;
 import com.alert.alert.entities.RefreshToken;
 import com.alert.alert.entities.User;
 import com.alert.alert.entities.enums.TokenType;
+import com.alert.alert.exceptions.TokenException;
 import com.alert.alert.payload.request.RefreshTokenRequest;
 import com.alert.alert.payload.response.RefreshTokenResponse;
 import com.alert.alert.repositories.RefreshTokenRepository;

@@ -5,8 +5,6 @@ import com.alert.alert.entities.User;
 import com.alert.alert.repositories.ChannelsUsersRepository;
 import com.alert.alert.service.ChannelsUsersService;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,11 +15,6 @@ public class ChannelsUsersServiceImpl implements ChannelsUsersService {
 
     public ChannelsUsersServiceImpl(ChannelsUsersRepository channelsUsersRepository) {
         this.channelsUsersRepository = channelsUsersRepository;
-    }
-
-    @Override
-    public Collection<ChannelsUsers> getChannelsUsers() {
-        return channelsUsersRepository.findAll();
     }
 
     @Override

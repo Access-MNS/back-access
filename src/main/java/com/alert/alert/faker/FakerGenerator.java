@@ -24,7 +24,7 @@ public class FakerGenerator {
             insertFakeUsers(faker);
             insertFakeChannels(faker, i);
             insertFakeMessages(faker, i);
-            insertFakeChannelUser_GUs(faker, i);
+            insertFakeChannelUser(faker, i);
         }
 
         System.out.println("Fake datas inserted successfully!");
@@ -59,7 +59,7 @@ public class FakerGenerator {
     }
 
     //One group many users
-    private void insertFakeChannelUser_GUs(Faker faker, int i) {
+    private void insertFakeChannelUser(Faker faker, int i) {
         int channel = faker.number().numberBetween(1, i);
         boolean canEdit = faker.bool().bool();
         boolean canDelete = faker.bool().bool();
@@ -75,33 +75,17 @@ public class FakerGenerator {
                 creator, new Date(), creator, new Date());
     }
 
-    //One user many groups
-    private void insertFakeChannelUser_GsU(Faker faker, int i) {
-        int user = faker.number().numberBetween(1, i);
-        boolean canEdit = faker.bool().bool();
-        boolean canDelete = faker.bool().bool();
-        boolean canInvite = faker.bool().bool();
-        boolean canView = faker.bool().bool();
-        String creator = faker.name().username();
-
-        String insertQuery = "INSERT INTO channels_users (channel_id, user_id, can_edit, can_delete, " +
-                "can_invite, can_view, created_by, created_date, modified_by, modified_date) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?)";
-
-        jdbcTemplate.update(insertQuery, i, user, canEdit, canDelete, canInvite, canView,
-                creator, new Date(), creator, new Date());
-    }
-
     private void insertFakeMessages(Faker faker, int i) {
         int sender = faker.number().numberBetween(1, i);
+        int channelId = faker.number().numberBetween(1, i);
         String action = faker.options().option("JOINED", "COMMENTED", "LEFT");
         String comment = faker.lorem().sentence();
         boolean isDeleted = faker.bool().bool();
 
-        String insertQuery = "INSERT INTO messages (sender, action, comment, is_deleted, " +
+        String insertQuery = "INSERT INTO messages (sender, action, comment, is_deleted, channel_id, " +
                 "created_by, created_date, modified_by, modified_date) " +
-                "VALUES (?,?,?,?,?,?,?,?)";
+                "VALUES (?,?,?,?,?,?,?,?,?)";
 
-        jdbcTemplate.update(insertQuery, sender, action, comment, isDeleted, sender, new Date(), sender, new Date());
+        jdbcTemplate.update(insertQuery, sender, action, comment, isDeleted, channelId, sender, new Date(), sender, new Date());
     }
 }

@@ -1,34 +1,42 @@
 package com.alert.alert.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import java.util.*;
-import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "channels")
 public class Channel extends Auditable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.Public.class)
     private long id;
 
+    @JsonView(Views.Public.class)
     private String name;
 
+    @JsonView(Views.Public.class)
     private String description;
 
     @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<ChannelsUsers> users = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_channel_id", referencedColumnName = "id")
     private Channel parentChannelId;
 
-    @OneToMany(mappedBy = "parentChannelId") @JsonIgnore
+    @OneToMany(mappedBy = "parentChannelId")
     private Set<Channel> childChannelsId = new HashSet<>();
 
     public void addChannelUser(User user, boolean canEdit, boolean canDelete, boolean canView, boolean canInvite) {

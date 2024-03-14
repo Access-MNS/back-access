@@ -44,10 +44,8 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);
 
-        ResponseCookie jwtCookie = jwtService
-                .generateJwtCookie(authenticationResponse.getAccessToken());
-        ResponseCookie refreshTokenCookie = refreshTokenService
-                .generateRefreshTokenCookie(authenticationResponse.getRefreshToken());
+        ResponseCookie jwtCookie = jwtService.generateJwtCookie(authenticationResponse.getAccessToken());
+        ResponseCookie refreshTokenCookie = refreshTokenService.generateRefreshTokenCookie(authenticationResponse.getRefreshToken());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE,jwtCookie.toString())
@@ -75,7 +73,7 @@ public class AuthenticationController {
 
     @GetMapping("/info")
     public Authentication getAuthentication(@RequestBody AuthenticationRequest request){
-        return     authenticationManager.authenticate(
+        return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
     }
 

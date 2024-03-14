@@ -1,6 +1,7 @@
 package com.alert.alert.entities;
 
 import com.alert.alert.entities.enums.Action;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,17 +25,22 @@ public class Message extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.Public.class)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sender", referencedColumnName = "id")
+    @JsonView(Views.Public.class)
     private User sender;
 
+    @JsonView(Views.Public.class)
     private String comment;
 
+    @JsonView(Views.Public.class)
     private Action action;
 
     @ManyToOne
+    @JsonView(Views.Public.class)
     Channel channel;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -45,6 +51,6 @@ public class Message extends Auditable{
     )
     Set<User> sentTo = new HashSet<>();
 
+    @JsonView(Views.Public.class)
     boolean isDeleted = false;
-
 }

@@ -2,6 +2,7 @@ package com.alert.alert.entities.keys;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+
 import java.io.Serializable;
 
 @Embeddable
