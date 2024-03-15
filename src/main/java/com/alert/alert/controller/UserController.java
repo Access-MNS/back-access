@@ -29,7 +29,7 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @GetMapping("/user?{id}")
+    @GetMapping("/user/{id}")
     @JsonView(Views.Public.class)
     ResponseEntity<User> getUser(@PathVariable Long id) {
         User user = userService.getUser(id);
@@ -46,7 +46,7 @@ public class UserController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping("user?{id}")
+    @DeleteMapping("user/{id}")
     @JsonView(Views.Public.class)
     public ResponseEntity<User> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id)

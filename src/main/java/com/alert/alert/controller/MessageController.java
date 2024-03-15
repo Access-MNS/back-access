@@ -38,21 +38,21 @@ public class MessageController {
         return messageService.getMessagesDeleted();
     }
 
-    @GetMapping("/messages/not_seen?{userId}")
+    @GetMapping("/messages/not_seen/{userId}")
     @JsonView(Views.Public.class)
     Collection<Message> messagesNotSeen(@PathVariable Long userId) {
 
         return messageService.getMessagesNotSeen(userId);
     }
 
-    @GetMapping("/messages?{id}")
+    @GetMapping("/messages/{id}")
     @JsonView(Views.Public.class)
     Collection<Message> getMessages (@PathVariable Long id) {
 
         return messageService.getMessagesInChannel(id);
     }
 
-    @GetMapping("/message?{id}")
+    @GetMapping("/message/{id}")
     @JsonView(Views.Public.class)
     ResponseEntity<Message> getMessage(@PathVariable Long id) {
 
@@ -61,7 +61,7 @@ public class MessageController {
         return returnMessage(message);
     }
 
-    @PostMapping("/messages?{channelId}")
+    @PostMapping("/messages/{channelId}")
     @JsonView(Views.Public.class)
     ResponseEntity<Message> createMessage(@Validated
                                           @RequestBody MessageRequest messageRequest,
@@ -81,7 +81,7 @@ public class MessageController {
         return returnMessage(message);
     }
 
-    @DeleteMapping("messages?{id}")
+    @DeleteMapping("messages/{id}")
     @JsonView(Views.Public.class)
     public ResponseEntity<Message> deleteMessage(@PathVariable Long id) {
 

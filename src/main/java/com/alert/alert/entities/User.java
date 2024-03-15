@@ -38,9 +38,6 @@ public class User extends Auditable implements UserDetails {
     private String password;
 
     @JsonView(Views.Public.class)
-    private String profilePicturePath;
-
-    @JsonView(Views.Public.class)
     private LocalDateTime lastSeen;
 
     @JsonView(Views.Public.class)
