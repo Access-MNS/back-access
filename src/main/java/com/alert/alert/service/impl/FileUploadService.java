@@ -28,9 +28,9 @@ public class FileUploadService {
 
     public boolean saveFileInDatabase(MultipartFile file, Long channelId) throws IOException {
         if (channelRepository.existsById(channelId)
-            && !documentRepository.existsByName(file.getOriginalFilename())) {
+            && !documentRepository.existsByName(channelId + "c_" + file.getOriginalFilename())) {
 
-            Document doc = new Document(file.getOriginalFilename(), file.getContentType(), file.getBytes());
+            Document doc = new Document(channelId + "c_" + file.getOriginalFilename(), file.getContentType(), file.getBytes());
             doc.setChannel(channelService.getChannel(channelId));
             documentRepository.save(doc);
             messageService.createMessage(new Message(Action.FILE), channelId);
@@ -39,23 +39,28 @@ public class FileUploadService {
             return true;
         }
 
-        log.info("Channel {} not found", channelId);
+        log.info(documentRepository.existsByName(channelId + "c_" + file.getOriginalFilename())
+                ? "File already exists in database"
+                : "Channel {} not found", channelId);
+
         return false;
     }
 
     public boolean saveProfilePictureInDatabase(MultipartFile file, long userId) throws IOException {
         if (userRepository.existsById(userId)
-            && !documentRepository.existsByName(file.getOriginalFilename())) {
+            && !documentRepository.existsByName(userId + "u_" + file.getOriginalFilename())) {
 
-            Document doc = new Document(file.getOriginalFilename(), file.getContentType(), file.getBytes());
+            Document doc = new Document(userId + "u_" + file.getOriginalFilename(), file.getContentType(), file.getBytes());
             doc.setUser(userService.getUser(userId));
             documentRepository.save(doc);
             log.info("Saving file {} in database", file.getOriginalFilename());
 
             return true;
         }
+        log.info(documentRepository.existsByName(userId + "u_" + file.getOriginalFilename())
+                ? "File already exists in database"
+                : "User {} not found", userId);
 
-        log.info("User {} not found", userId);
         return false;
     }
 }

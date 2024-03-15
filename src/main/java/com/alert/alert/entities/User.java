@@ -45,7 +45,7 @@ public class User extends Auditable implements UserDetails {
     private Role role;
 
     @ManyToMany(mappedBy = "sentTo")
-    private Set<Message> gotMessage = new HashSet<>();
+    private transient Set<Message> gotMessage = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
