@@ -1,10 +1,12 @@
 package com.alert.alert.service.impl;
 
 import com.alert.alert.entities.Message;
+import com.alert.alert.entities.User;
 import com.alert.alert.repositories.MessageRepository;
 import com.alert.alert.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,11 +18,13 @@ public class MessageServiceImpl implements MessageService {
     private final ChannelServiceImpl channelService;
     private final ChannelsUsersServiceImpl channelsUsersService;
     private final MessageRepository messageRepository;
+    private final UserServiceImpl userService;
 
-    public MessageServiceImpl(ChannelServiceImpl channelService, ChannelsUsersServiceImpl channelsUsersService, MessageRepository messageRepository) {
+    public MessageServiceImpl(ChannelServiceImpl channelService, ChannelsUsersServiceImpl channelsUsersService, MessageRepository messageRepository, UserServiceImpl userService) {
         this.channelService = channelService;
         this.channelsUsersService = channelsUsersService;
         this.messageRepository = messageRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -54,6 +58,7 @@ public class MessageServiceImpl implements MessageService {
         if (!messageExists(message.getId())) {
 
             message.setChannel(channelService.getChannel(channelId))
+                    .setSender(userService.getUser(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()))
                     .setSentTo(channelsUsersService.getUsers(channelId));
             logger.info("Creating message {} in channel {}", message, channelId);
 

@@ -6,6 +6,7 @@ import com.alert.alert.entities.enums.Action;
 import com.alert.alert.repositories.ChannelRepository;
 import com.alert.alert.repositories.DocumentRepository;
 import com.alert.alert.repositories.UserRepository;
+import com.alert.alert.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.io.IOException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FileUploadService {
+public class FileUploadServiceImpl implements FileUploadService {
 
     private final DocumentRepository documentRepository;
     private final ChannelRepository channelRepository;
@@ -25,7 +26,7 @@ public class FileUploadService {
     private final MessageServiceImpl messageService;
     private final UserServiceImpl userService;
 
-
+    @Override
     public boolean saveFileInDatabase(MultipartFile file, Long channelId) throws IOException {
         if (channelRepository.existsById(channelId)
             && !documentRepository.existsByName(channelId + "c_" + file.getOriginalFilename())) {
@@ -46,6 +47,7 @@ public class FileUploadService {
         return false;
     }
 
+    @Override
     public boolean saveProfilePictureInDatabase(MultipartFile file, long userId) throws IOException {
         if (userRepository.existsById(userId)
             && !documentRepository.existsByName(userId + "u_" + file.getOriginalFilename())) {

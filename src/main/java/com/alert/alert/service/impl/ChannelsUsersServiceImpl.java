@@ -1,5 +1,6 @@
 package com.alert.alert.service.impl;
 
+import com.alert.alert.entities.Channel;
 import com.alert.alert.entities.ChannelsUsers;
 import com.alert.alert.entities.User;
 import com.alert.alert.repositories.ChannelsUsersRepository;
@@ -27,5 +28,10 @@ public class ChannelsUsersServiceImpl implements ChannelsUsersService {
     @Override
     public Set<User> getUsers(Long channelId) {
         return channelsUsersRepository.getChannelsUsersByChannelId(channelId);
+    }
+
+    @Override
+    public Set<Channel> getChannelsByUserId(Long userId) {
+        return channelsUsersRepository.getChannelsByUserId(userId);
     }
 }

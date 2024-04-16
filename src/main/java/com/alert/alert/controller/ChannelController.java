@@ -43,7 +43,14 @@ public class ChannelController {
         return channelsUsersService.getUsers(id);
     }
 
-    @RequestMapping("/channels/{id}")
+    @RequestMapping("channels/{id}")
+    @JsonView(Views.Public.class)
+    Collection<Channel> getChannelsForUser(@PathVariable Long id) {
+
+        return channelsUsersService.getChannelsByUserId(id);
+    }
+
+    @RequestMapping("/channel/{id}")
     @JsonView(Views.Public.class)
     ResponseEntity<Channel> getChannel(@PathVariable Long id) {
 

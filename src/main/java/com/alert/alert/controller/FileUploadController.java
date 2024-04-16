@@ -1,7 +1,7 @@
 package com.alert.alert.controller;
 
 import com.alert.alert.entities.Views;
-import com.alert.alert.service.impl.FileUploadService;
+import com.alert.alert.service.impl.FileUploadServiceImpl;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,15 +15,15 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/files")
+@RequestMapping("/api/v1/upload")
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('ADMIN','USER')")
 public class FileUploadController {
 
-    private final FileUploadService fileUploadService;
+    private final FileUploadServiceImpl fileUploadService;
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg");
 
-    @PostMapping(value = "/upload/file/{channelId}", consumes = "multipart/form-data")
+    @PostMapping(value = "/channel/{channelId}", consumes = "multipart/form-data")
     @JsonView(Views.Public.class)
     public String uploadFile(@RequestParam("file") MultipartFile file,
                              @PathVariable Long channelId) throws IOException {
@@ -33,7 +33,7 @@ public class FileUploadController {
                 : "File upload failed";
     }
 
-    @PostMapping(value = "/upload/pp/{userId}", consumes = "multipart/form-data")
+    @PostMapping(value = "/user/{userId}", consumes = "multipart/form-data")
     @JsonView(Views.Public.class)
     public String uploadProfilePicture(@RequestParam("profilePicture") MultipartFile file,
                                        @PathVariable Long userId) throws IOException {

@@ -1,5 +1,6 @@
 package com.alert.alert.repositories;
 
+import com.alert.alert.entities.Channel;
 import com.alert.alert.entities.ChannelsUsers;
 import com.alert.alert.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,8 @@ public interface ChannelsUsersRepository extends JpaRepository<ChannelsUsers, Lo
 
     @Query("select u from User u left join ChannelsUsers c on u.id = c.id.userId where c.id.channelId = :channelId")
     Set<User> getChannelsUsersByChannelId(Long channelId);
+
+    @Query("select c from Channel c left join ChannelsUsers cu on c.id = cu.id.channelId where cu.id.userId = :userId")
+    Set<Channel> getChannelsByUserId(Long userId);
+
 }
