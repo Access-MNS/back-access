@@ -18,4 +18,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query("select distinct m from Message m join m.sentTo mst where mst.id = :id")
     List<Message> getMessagesNotSeenByUserId(Long id);
+
+    @Query ("delete from Message.sentTo mst where mst.id = :userId")
+    void deleteByUserId(Long userId);
 }
