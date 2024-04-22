@@ -40,14 +40,25 @@ public class MessageController {
 
     @GetMapping("/messages/not_seen/{userId}")
     @JsonView(Views.Public.class)
-    Collection<Message> messagesNotSeen(@PathVariable Long userId) {
+    Collection<Message> getMessagesNotSeen(@PathVariable Long userId) {
 
         return messageService.getMessagesNotSeen(userId);
     }
 
+    @DeleteMapping("/messages/not_seen/{userId}/{channelId}")
+    @JsonView(Views.Public.class)
+    public ResponseEntity<Message> deleteMessageNotSeen(@Validated
+                                                        @PathVariable Long userId,
+                                                        @PathVariable Long channelId) {
+
+        return messageService.deleteMessageNotSeen(userId, channelId)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/messages/{id}")
     @JsonView(Views.Public.class)
-    Collection<Message> getMessages (@PathVariable Long id) {
+    Collection<Message> getMessagesInChannel (@PathVariable Long id) {
 
         return messageService.getMessagesInChannel(id);
     }
