@@ -1,5 +1,6 @@
 package com.alert.alert.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -25,19 +26,23 @@ public abstract class Auditable {
     @Column(name = "created_date", nullable = false, updatable = false)
     @CreatedDate
     @Temporal(TIMESTAMP)
+    @JsonView(Views.Public.class)
     private Date createdDate;
 
     @Column(name="modified_date")
     @LastModifiedDate
     @Temporal(TIMESTAMP)
+    @JsonView(Views.Public.class)
     private Date modifiedDate;
 
     @Column(name = "created_by", nullable = false, updatable = false)
     @CreatedBy
+    @JsonView(Views.Public.class)
     private String createdBy;
 
     @Column(name = "modified_by")
     @LastModifiedBy
+    @JsonView(Views.Public.class)
     private String modifiedBy;
 }
 
