@@ -43,6 +43,22 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public boolean deleteMessageNotSeen(Long userId, Long channelId) {
+        if (channelService.channelUserExists(userId, channelId)) {
+
+            Collection<Message> messages = messageRepository.getMessagesNotSeenByUserId(userId);
+            for (Message message : messages) {
+                if (message.getChannel().getId() == channelId) {
+                    messageRepository.deleteByUserId(userId);
+                    logger.info("Deleting messages seen by user " + userId + " in channel " + channelId);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Collection<Message> getMessagesInChannel(Long id) {
         return messageRepository.getMessagesByChannel_Id(id);
     }
