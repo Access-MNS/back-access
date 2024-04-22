@@ -146,7 +146,7 @@ public class ChannelServiceImpl implements ChannelService {
         return true;
     }
 
-    private boolean channelUserExists(Long userId, Long channelId) {
+    public boolean channelUserExists(Long userId, Long channelId) {
         if(!channelsUsersRepository.existsByUserIdAndChannelId(userId, channelId)){
             logger.info("User {} not in channel {}", userId, channelId);
             return false;
