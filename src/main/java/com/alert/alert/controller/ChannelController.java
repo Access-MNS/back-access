@@ -29,28 +29,28 @@ public class ChannelController {
         this.channelService = channelService;
     }
 
-    @RequestMapping("/channels")
+    @GetMapping("/channels")
     @JsonView(Views.Public.class)
     Collection<Channel> getChannels() {
 
         return channelService.getChannels();
     }
 
-    @RequestMapping("/channel/{id}/users")
+    @GetMapping("/channel/users/{id}")
     @JsonView(Views.Public.class)
     Collection<User> getChannelsUsers(@PathVariable Long id) {
 
         return channelsUsersService.getUsers(id);
     }
 
-    @RequestMapping("channels/{id}")
+    @GetMapping("channels/{id}")
     @JsonView(Views.Public.class)
     Collection<Channel> getChannelsForUser(@PathVariable Long id) {
 
         return channelsUsersService.getChannelsByUserId(id);
     }
 
-    @RequestMapping("/channel/{id}")
+    @GetMapping("/channel/{id}")
     @JsonView(Views.Public.class)
     ResponseEntity<Channel> getChannel(@PathVariable Long id) {
 
