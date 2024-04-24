@@ -10,6 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -46,17 +49,28 @@ public class MessageServiceImpl implements MessageService {
     public boolean deleteMessageNotSeen(Long userId, Long channelId) {
         if (channelService.channelUserExists(userId, channelId)) {
 
-            Collection<Message> messages = messageRepository.getMessagesNotSeenByUserId(userId);
-            for (Message message : messages) {
-                if (message.getChannel().getId() == channelId) {
-                    messageRepository.deleteByUserId(userId);
-                    logger.info("Deleting messages seen by user " + userId + " in channel " + channelId);
-                }
+            Collection<Message> messagesNotSeen = getMessagesNotSeen(userId);
+            List<Message> messagesInChannel = messagesNotSeen.stream()
+                    .filter(msg -> msg.getChannel().getId() == channelId)
+                    .toList();
+
+            for (Message message : messagesInChannel) {
+                Set<User> notSeenByUser = message.getSentTo().stream()
+                        .filter(user -> user.getId() == userId)
+                        .collect(Collectors.toSet());
+
+                message.getSentTo().removeAll(notSeenByUser);
+                messageRepository.save(message);
+
+                logger.info("Deleting messagesNotSeen not seen by user " + userId + " in channel " + channelId);
             }
+
             return true;
         }
         return false;
     }
+
+
 
     @Override
     public Collection<Message> getMessagesInChannel(Long id) {
