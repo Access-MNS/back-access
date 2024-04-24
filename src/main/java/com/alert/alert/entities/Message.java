@@ -28,7 +28,7 @@ public class Message extends Auditable{
     @JsonView(Views.Public.class)
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "sender", referencedColumnName = "id")
     @JsonView(Views.Public.class)
     private User sender;
@@ -43,7 +43,7 @@ public class Message extends Auditable{
     @JsonView(Views.Public.class)
     Channel channel;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
         name = "messages_not_seen",
         joinColumns = @JoinColumn(name = "message_id"),
