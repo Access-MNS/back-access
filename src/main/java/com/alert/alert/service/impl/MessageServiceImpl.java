@@ -4,6 +4,9 @@ import com.alert.alert.entities.Message;
 import com.alert.alert.entities.User;
 import com.alert.alert.repositories.MessageRepository;
 import com.alert.alert.service.MessageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -99,14 +102,24 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message updateMessage(Message messages) {
-        return messageExists(messages.getId())
-                ? messageRepository.save(messages)
-                : null;
+    public Message updateMessage(Long id, String text) throws JsonProcessingException {
+
+        if (messageExists(id)) {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode jsonNode = mapper.readTree(text);
+
+            Message message = getMessage(id);
+            message.setComment(jsonNode.get("message").asText());
+
+            return messageRepository.save(message);
+        }
+
+        logger.error("Message not found.");
+        return null;
     }
 
     @Override
-    public boolean deleteMessage(Long id) {
+    public boolean deleteMessage(Long id) throws JsonProcessingException {
         if (messageExists(id)) {
 
             Message message = getMessage(id);
@@ -117,7 +130,8 @@ public class MessageServiceImpl implements MessageService {
                     .setComment(message.getComment())
                     .setDeleted(true)
                     .setSentTo(null);
-            updateMessage(message);
+
+            messageRepository.save(message);
             logger.info("Message {} now marked as deleted", id);
 
             return true;
