@@ -1,13 +1,16 @@
 package com.alert.alert.service.impl;
 
 import com.alert.alert.entities.Channel;
+import com.alert.alert.entities.Message;
 import com.alert.alert.entities.User;
+import com.alert.alert.entities.enums.Action;
 import com.alert.alert.repositories.ChannelRepository;
 import com.alert.alert.repositories.ChannelsUsersRepository;
 import com.alert.alert.repositories.UserRepository;
 import com.alert.alert.service.ChannelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +22,16 @@ public class ChannelServiceImpl implements ChannelService {
     private final Logger logger = LoggerFactory.getLogger(ChannelServiceImpl.class);
     private final ChannelsUsersRepository channelsUsersRepository;
     private final ChannelsUsersServiceImpl channelsUsersService;
+    private final SimpMessagingTemplate messagingTemplate;
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
     private final UserServiceImpl userService;
 
-    public ChannelServiceImpl(ChannelsUsersRepository channelsUsersRepository, ChannelRepository channelRepository, ChannelsUsersServiceImpl channelsUsersService, UserRepository userRepository, UserServiceImpl userService) {
+    public ChannelServiceImpl(ChannelsUsersRepository channelsUsersRepository, ChannelRepository channelRepository, ChannelsUsersServiceImpl channelsUsersService, SimpMessagingTemplate messagingTemplate, UserRepository userRepository, UserServiceImpl userService) {
         this.channelsUsersRepository = channelsUsersRepository;
         this.channelsUsersService = channelsUsersService;
         this.channelRepository = channelRepository;
+        this.messagingTemplate = messagingTemplate;
         this.userRepository = userRepository;
         this.userService = userService;
     }
@@ -80,20 +85,24 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public boolean addUserToChannel(Long userId, Long channelId) {
-        if (channelExists(channelId)
-                && userExists(userId)
-                && !channelUserExists(userId, channelId)) {
-
+        if (channelExists(channelId) && userExists(userId) && !channelUserExists(userId, channelId)) {
             Channel channel = getChannel(channelId);
-            channel.addChannelUser(userService.getUser(userId),
-                    false, false, true, false);
+            User user = userService.getUser(userId);
+
+            channel.addChannelUser(user, false, false, true, false);
             channelRepository.save(channel);
             logger.info("Adding user {} to channel {}", userId, channelId);
+
+            sendMessageToChannel(channelId, new Message(user, Action.JOINED));
 
             return true;
         }
 
         return false;
+    }
+
+    private void sendMessageToChannel(Long channelId, Message message) {
+        messagingTemplate.convertAndSend("/room/" + channelId, message);
     }
 
     @Override
