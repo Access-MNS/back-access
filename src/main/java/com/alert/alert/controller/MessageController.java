@@ -5,6 +5,7 @@ import com.alert.alert.entities.Views;
 import com.alert.alert.payload.request.MessageRequest;
 import com.alert.alert.service.impl.MessageServiceImpl;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -83,18 +84,19 @@ public class MessageController {
         return returnMessage(message);
     }
 
-    @PutMapping("messages")
+    @PutMapping("messages/{messageId}")
     @JsonView(Views.Public.class)
-    ResponseEntity<Message> updateMessage(@Validated @RequestBody MessageRequest messageRequest) {
+    ResponseEntity<Message> updateMessage(@PathVariable Long messageId,
+                                          @RequestBody String messageText) throws JsonProcessingException {
 
-        Message message = messageService.updateMessage(messageRequest.toMessage());
+        Message message = messageService.updateMessage(messageId, messageText);
 
         return returnMessage(message);
     }
 
     @DeleteMapping("messages/{id}")
     @JsonView(Views.Public.class)
-    public ResponseEntity<Message> deleteMessage(@PathVariable Long id) {
+    public ResponseEntity<Message> deleteMessage(@PathVariable Long id) throws JsonProcessingException {
 
         return messageService.deleteMessage(id)
                 ? ResponseEntity.ok().build()
