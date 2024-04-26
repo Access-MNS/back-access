@@ -23,6 +23,11 @@ public class Message extends Auditable{
         this.action = action;
     }
 
+    public Message(User sender, Action action) {
+        this.sender = sender;
+        this.action = action;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(Views.Public.class)
