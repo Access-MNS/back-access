@@ -30,6 +30,6 @@ public class AlertApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        fakerGenerator.generateFake(50);
+        fakerGenerator.generateFake(0);
     }
 }

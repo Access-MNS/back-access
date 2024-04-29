@@ -34,7 +34,7 @@ public class FakerGenerator {
         String password = faker.internet().password();
         String lastName = faker.name().lastName();
         String firstName = faker.name().firstName();
-        String pseudo = faker.name().username();
+        String pseudo = firstName.toLowerCase() + "." + lastName.toLowerCase() + "@gmail.com";
         String role = faker.options().option("USER", "ADMIN");
 
         String insertQuery = "INSERT INTO users (password, mail, role, last_name, first_name, " +

@@ -82,7 +82,7 @@
                 <db_name>alert</db_name>
                 <db_username>root</db_username>
                 <db_password>root</db_password>
-                <db_method>create</db_method>
+                <db_method>update</db_method>
                 <secret_key>586B633834416E396D7436753879382F423F4428482B4C6250655367566B5970</secret_key>
                 <jwt_expiration>900000</jwt_expiration>
                 <refresh-token_expiration>1296000000</refresh-token_expiration>
