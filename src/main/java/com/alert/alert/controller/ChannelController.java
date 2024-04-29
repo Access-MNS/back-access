@@ -24,30 +24,8 @@ public class ChannelController {
     private final ChannelServiceImpl channelService;
 
     public ChannelController(ChannelsUsersService channelsUsersService, ChannelServiceImpl channelService) {
-
         this.channelsUsersService = channelsUsersService;
         this.channelService = channelService;
-    }
-
-    @GetMapping("/channels")
-    @JsonView(Views.Public.class)
-    Collection<Channel> getChannels() {
-
-        return channelService.getChannels();
-    }
-
-    @GetMapping("/channel/users/{id}")
-    @JsonView(Views.Public.class)
-    Collection<User> getChannelsUsers(@PathVariable Long id) {
-
-        return channelsUsersService.getUsers(id);
-    }
-
-    @GetMapping("channels/{id}")
-    @JsonView(Views.Public.class)
-    Collection<Channel> getChannelsForUser(@PathVariable Long id) {
-
-        return channelsUsersService.getChannelsByUserId(id);
     }
 
     @GetMapping("/channel/{id}")
@@ -59,24 +37,34 @@ public class ChannelController {
         return returnChannel(channel);
     }
 
+    @GetMapping("/channels")
+    @JsonView(Views.Public.class)
+    Collection<Channel> getChannels() {
+        return channelService.getChannels();
+    }
+
+    @GetMapping("channels/{id}")
+    @JsonView(Views.Public.class)
+    Collection<Channel> getChannelsForUser(@PathVariable Long id) {
+        return channelsUsersService.getChannelsByUserId(id);
+    }
+
+    @GetMapping("/channel/users/{id}")
+    @JsonView(Views.Public.class)
+    Collection<User> getChannelsUsers(@PathVariable Long id) {
+        return channelsUsersService.getUsers(id);
+    }
+
     @PostMapping("/channels")
     @JsonView(Views.Public.class)
-    ResponseEntity<Channel> createChannel(@Validated
-                                          @RequestBody ChannelRequest channelRequest) {
-
-        Channel channel = channelService.createChannel(channelRequest.toChannel());
-
-        return returnChannel(channel);
+    ResponseEntity<Channel> createChannel(@Validated @RequestBody ChannelRequest channelRequest) {
+        return returnChannel(channelService.createChannel(channelRequest.toChannel()));
     }
 
     @PutMapping("/channels")
     @JsonView(Views.Public.class)
-    ResponseEntity<Channel> updateChannel(@Validated
-                                          @RequestBody ChannelRequest channelRequest) {
-
-        Channel channel = channelService.updateChannel(channelRequest.toChannel());
-
-        return returnChannel(channel);
+    ResponseEntity<Channel> updateChannel(@Validated @RequestBody ChannelRequest channelRequest) {
+        return returnChannel(channelService.updateChannel(channelRequest.toChannel()));
     }
 
     @DeleteMapping("/channels/{id}")
@@ -88,22 +76,11 @@ public class ChannelController {
                 : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/channels/{channelId}/{userId}")
-    @JsonView(Views.Public.class)
-    ResponseEntity<String> removeUserFromChannel(@Validated
-                                             @PathVariable Long userId,
-                                             @PathVariable Long channelId) {
-
-        return channelService.removeUserFromChannel(userId, channelId)
-                ? ResponseEntity.ok("User successfully deleted from channel")
-                : ResponseEntity.notFound().build();
-    }
-
     @PostMapping("/channels/{channelId}/{userId}")
     @JsonView(Views.Public.class)
     ResponseEntity<String> addUserToChannel(@Validated
-                                             @PathVariable Long userId,
-                                             @PathVariable Long channelId) {
+                                            @PathVariable Long userId,
+                                            @PathVariable Long channelId) {
 
         return channelService.addUserToChannel(userId, channelId)
                 ? ResponseEntity.ok("User successfully added")
@@ -113,14 +90,25 @@ public class ChannelController {
     @PutMapping("/channels/{channelId}/{userId}")
     @JsonView(Views.Public.class)
     ResponseEntity<Channel> updateUserFromChannel(@Validated
-                                                 @PathVariable Long userId,
-                                                 @PathVariable Long channelId,
-                                                 @RequestBody UpdateChannelUserRequest user) {
+                                                  @PathVariable Long userId,
+                                                  @PathVariable Long channelId,
+                                                  @RequestBody UpdateChannelUserRequest user) {
 
         Channel channel = channelService.updateUserFromChannel(userId, channelId,
                 user.isCanEdit(), user.isCanDelete(), user.isCanView(), user.isCanInvite());
 
         return returnChannel(channel);
+    }
+
+    @DeleteMapping("/channels/{channelId}/{userId}")
+    @JsonView(Views.Public.class)
+    ResponseEntity<String> removeUserFromChannel(@Validated
+                                             @PathVariable Long userId,
+                                             @PathVariable Long channelId) {
+
+        return channelService.removeUserFromChannel(userId, channelId)
+                ? ResponseEntity.ok("User successfully deleted from channel")
+                : ResponseEntity.notFound().build();
     }
 
     private ResponseEntity<Channel> returnChannel(Channel channel) {

@@ -6,6 +6,7 @@ import com.alert.alert.entities.User;
 import com.alert.alert.repositories.ChannelsUsersRepository;
 import com.alert.alert.service.ChannelsUsersService;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,8 +22,7 @@ public class ChannelsUsersServiceImpl implements ChannelsUsersService {
     @Override
     public ChannelsUsers getChannelUser(Long userId, Long channelId) {
         Optional<ChannelsUsers> channelsUsers = channelsUsersRepository.findByUserIdAndChannelId(userId, channelId);
-        return channelsUsers
-                .orElse(null);
+        return channelsUsers.orElse(null);
     }
 
     @Override

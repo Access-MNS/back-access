@@ -21,28 +21,24 @@ public class MessageController {
     private final MessageServiceImpl messageService;
 
     public MessageController(MessageServiceImpl messageService) {
-
         this.messageService = messageService;
     }
 
     @GetMapping("/messages")
     @JsonView(Views.Public.class)
     Collection<Message> messages() {
-
         return messageService.getMessages();
     }
 
     @GetMapping("/messages/deleted")
     @JsonView(Views.Public.class)
     Collection<Message> messagesDeleted() {
-
         return messageService.getMessagesDeleted();
     }
 
     @GetMapping("/messages/not_seen/{userId}")
     @JsonView(Views.Public.class)
     Collection<Message> getMessagesNotSeen(@PathVariable Long userId) {
-
         return messageService.getMessagesNotSeen(userId);
     }
 
@@ -69,7 +65,6 @@ public class MessageController {
     ResponseEntity<Message> getMessage(@PathVariable Long id) {
 
         Message message = messageService.getMessage(id);
-
         return returnMessage(message);
     }
 
@@ -80,7 +75,6 @@ public class MessageController {
                                           @PathVariable Long channelId) {
 
         Message message = messageService.createMessage(messageRequest.toMessage(), channelId);
-
         return returnMessage(message);
     }
 
@@ -90,7 +84,6 @@ public class MessageController {
                                           @RequestBody String messageText) throws JsonProcessingException {
 
         Message message = messageService.updateMessage(messageId, messageText);
-
         return returnMessage(message);
     }
 
@@ -104,7 +97,6 @@ public class MessageController {
     }
 
     private ResponseEntity<Message> returnMessage(Message message) {
-
         return message != null
                 ? ResponseEntity.ok(message)
                 : ResponseEntity.notFound().build();

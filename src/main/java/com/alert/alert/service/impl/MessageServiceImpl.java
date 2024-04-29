@@ -7,8 +7,6 @@ import com.alert.alert.service.MessageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
 @Service
 public class MessageServiceImpl implements MessageService {
 
-    private final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
     private final ChannelServiceImpl channelService;
     private final ChannelsUsersServiceImpl channelsUsersService;
     private final MessageRepository messageRepository;
@@ -64,16 +61,12 @@ public class MessageServiceImpl implements MessageService {
 
                 message.getSentTo().removeAll(notSeenByUser);
                 messageRepository.save(message);
-
-                logger.info("Deleting messagesNotSeen not seen by user " + userId + " in channel " + channelId);
             }
 
             return true;
         }
         return false;
     }
-
-
 
     @Override
     public Collection<Message> getMessagesInChannel(Long id) {
@@ -93,18 +86,15 @@ public class MessageServiceImpl implements MessageService {
             message.setChannel(channelService.getChannel(channelId))
                     .setSender(userService.getUser(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()))
                     .setSentTo(channelsUsersService.getUsers(channelId));
-            logger.info("Creating message {} in channel {}", message, channelId);
-
             return messageRepository.save(message);
         }
-
-    return null;
+        return null;
     }
 
     @Override
     public Message updateMessage(Long id, String text) throws JsonProcessingException {
-
         if (messageExists(id)) {
+
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(text);
 
@@ -113,8 +103,6 @@ public class MessageServiceImpl implements MessageService {
 
             return messageRepository.save(message);
         }
-
-        logger.error("Message not found.");
         return null;
     }
 
@@ -132,21 +120,12 @@ public class MessageServiceImpl implements MessageService {
                     .setSentTo(null);
 
             messageRepository.save(message);
-            logger.info("Message {} now marked as deleted", id);
-
             return true;
         }
-
         return false;
     }
 
     private boolean messageExists(Long id) {
-        if (!messageRepository.existsById(id)) {
-            logger.error("Message not found.");
-            return false;
-        }
-        logger.error("Message already exists.");
-
-        return true;
+        return messageRepository.existsById(id);
     }
 }
