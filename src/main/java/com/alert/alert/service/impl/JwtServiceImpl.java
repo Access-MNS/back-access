@@ -27,6 +27,8 @@ public class JwtServiceImpl implements JwtService {
     private String secretKey;
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private long refreshTokenExpiration;
     @Value("${application.security.jwt.cookie-name}")
     private String jwtCookieName;
 
