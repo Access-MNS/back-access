@@ -1,6 +1,7 @@
 package com.alert.alert.entities;
 
 import com.alert.alert.entities.keys.ChannelsUsersKey;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +26,13 @@ public class ChannelsUsers extends Auditable{
     @MapsId("userId")
     private User user;
 
+    @JsonView(Views.Public.class)
     private boolean canEdit = false;
+    @JsonView(Views.Public.class)
     private boolean canDelete = false;
+    @JsonView(Views.Public.class)
     private boolean canView = true;
+    @JsonView(Views.Public.class)
     private boolean canInvite = false;
 
     public ChannelsUsers(Channel channel, User user) {
