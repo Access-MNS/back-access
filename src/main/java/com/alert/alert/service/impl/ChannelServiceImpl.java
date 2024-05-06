@@ -62,6 +62,30 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    public Channel createPrivateChannel(Channel channel, Long id) {
+        if (!channelExists(channel.getId())
+                && (channel.getParentChannelId() == null
+                || parentChannelExists(channel.getParentChannelId().getId()))) {
+
+            channel.setIsPrivate(true);
+
+            channel.addChannelUser(userService.getUser(
+                    ((User) SecurityContextHolder
+                            .getContext()
+                            .getAuthentication()
+                            .getPrincipal())
+                            .getId()
+            ),
+                    true, true, true, false);
+            channel.addChannelUser(userService.getUser(id),
+                    true, true, true, false);
+
+            return channelRepository.save(channel);
+        }
+        return null;
+    }
+
+    @Override
     public Channel updateChannel(Channel channel) {
         return channelExists(channel.getId())
                 ? channelRepository.save(channel)
