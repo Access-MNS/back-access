@@ -51,11 +51,11 @@ public class FakerGenerator {
         String description = faker.lorem().sentence();
         int parent = faker.number().numberBetween(1, i);
 
-        String insertQuery = "INSERT INTO channels (name, description, parent_channel_id, " +
+        String insertQuery = "INSERT INTO channels (name, description, is_private, parent_channel_id, " +
                 "created_by, created_date, modified_by, modified_date) " +
-                "VALUES (?,?,?,?,?,?,?)";
+                "VALUES (?,?,?,?,?, ?,?,?)";
 
-        jdbcTemplate.update(insertQuery, name, description, parent, creator, new Date(), creator, new Date());
+        jdbcTemplate.update(insertQuery, name, description, false, parent, creator, new Date(), creator, new Date());
     }
 
     //One group many users
