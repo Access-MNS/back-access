@@ -1,5 +1,6 @@
-package com.alert.alert.validation;
+package com.alert.alert.validation.Validators;
 
+import com.alert.alert.validation.StrongPassword;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
