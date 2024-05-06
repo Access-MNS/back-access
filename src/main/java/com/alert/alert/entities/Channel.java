@@ -29,6 +29,9 @@ public class Channel extends Auditable {
     @JsonView(Views.Public.class)
     private String description;
 
+    @JsonView(Views.Public.class)
+    private Boolean isPrivate = false;
+
     @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChannelsUsers> users = new ArrayList<>();
 
