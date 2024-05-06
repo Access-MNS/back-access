@@ -8,6 +8,7 @@ public interface ChannelService {
     Collection<Channel> getChannels();
     Channel getChannel(Long id);
     Channel createChannel(Channel channel);
+    Channel createPrivateChannel(Channel channel, Long id);
     Channel updateChannel(Channel channel);
     boolean deleteChannel(Long id);
 
