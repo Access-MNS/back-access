@@ -2,12 +2,14 @@ package com.alert.alert.controller;
 
 import com.alert.alert.entities.Message;
 import com.alert.alert.entities.Views;
+import com.alert.alert.entities.enums.PermissionType;
 import com.alert.alert.payload.request.MessageRequest;
 import com.alert.alert.service.impl.MessageServiceImpl;
+import com.alert.alert.validation.PermissionCheck;
+import com.alert.alert.validation.IsUser;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +17,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/v1")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@IsUser
 public class MessageController {
 
     private final MessageServiceImpl messageService;
@@ -55,7 +57,7 @@ public class MessageController {
 
     @GetMapping("/messages/{id}")
     @JsonView(Views.Public.class)
-    Collection<Message> getMessagesInChannel (@PathVariable Long id) {
+    Collection<Message> getMessagesInChannel(@PermissionCheck(PermissionType.VIEW) @PathVariable Long id) {
 
         return messageService.getMessagesInChannel(id);
     }
@@ -72,7 +74,7 @@ public class MessageController {
     @JsonView(Views.Public.class)
     ResponseEntity<Message> createMessage(@Validated
                                           @RequestBody MessageRequest messageRequest,
-                                          @PathVariable Long channelId) {
+                                          @PermissionCheck(PermissionType.VIEW) @PathVariable Long channelId) {
 
         Message message = messageService.createMessage(messageRequest.toMessage(), channelId);
         return returnMessage(message);

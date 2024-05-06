@@ -4,9 +4,10 @@ import com.alert.alert.entities.User;
 import com.alert.alert.entities.Views;
 import com.alert.alert.payload.request.UserRequest;
 import com.alert.alert.service.impl.UserServiceImpl;
+import com.alert.alert.validation.IsAdmin;
+import com.alert.alert.validation.IsUser;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/v1")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@IsUser
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -47,6 +48,7 @@ public class UserController {
     }
 
     @DeleteMapping("user/{id}")
+    @IsAdmin
     @JsonView(Views.Public.class)
     public ResponseEntity<User> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id)

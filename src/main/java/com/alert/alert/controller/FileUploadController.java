@@ -2,10 +2,10 @@ package com.alert.alert.controller;
 
 import com.alert.alert.entities.Views;
 import com.alert.alert.service.impl.FileUploadServiceImpl;
+import com.alert.alert.validation.IsUser;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/upload")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@IsUser
 public class FileUploadController {
 
     private final FileUploadServiceImpl fileUploadService;
