@@ -1,7 +1,7 @@
 package com.alert.alert.controller;
 
 import com.alert.alert.entities.Message;
-import com.alert.alert.service.impl.ChannelServiceImpl;
+import com.alert.alert.service.impl.ChannelsUsersServiceImpl;
 import com.alert.alert.service.impl.MessageServiceImpl;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 public class ChatController {
 
     MessageServiceImpl messageService;
-    ChannelServiceImpl channelService;
+    ChannelsUsersServiceImpl channelService;
 
     @MessageMapping("/chat/{channelId}/sendMessage")
     public void sendMessage(@Payload Message message, @DestinationVariable("channelId") Long channelId) {

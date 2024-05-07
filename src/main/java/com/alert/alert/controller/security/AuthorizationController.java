@@ -1,4 +1,4 @@
-package com.alert.alert.controller;
+package com.alert.alert.controller.security;
 
 import com.alert.alert.validation.IsAdmin;
 import com.alert.alert.validation.IsUser;

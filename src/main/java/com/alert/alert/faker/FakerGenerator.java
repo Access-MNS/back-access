@@ -67,7 +67,7 @@ public class FakerGenerator {
         boolean canView = faker.bool().bool();
         String creator = faker.name().username();
 
-        String insertQuery = "INSERT INTO channels_users (channel_id, user_id, can_edit, can_delete, " +
+        String insertQuery = "INSERT INTO channel_user (channel_id, user_id, can_edit, can_delete, " +
                 "can_invite, can_view, created_by, created_date, modified_by, modified_date) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?)";
 

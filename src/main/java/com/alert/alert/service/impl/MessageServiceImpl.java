@@ -11,9 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -33,39 +30,6 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Collection<Message> getMessages() {
         return messageRepository.findAll();
-    }
-
-    @Override
-    public Collection<Message> getMessagesDeleted() {
-        return messageRepository.getMessagesByIsDeletedIsTrue();
-    }
-
-    @Override
-    public Collection<Message> getMessagesNotSeen(Long userId) {
-        return messageRepository.getMessagesNotSeenByUserId(userId);
-    }
-
-    @Override
-    public boolean deleteMessageNotSeen(Long userId, Long channelId) {
-        if (channelService.channelUserExists(userId, channelId)) {
-
-            Collection<Message> messagesNotSeen = getMessagesNotSeen(userId);
-            List<Message> messagesInChannel = messagesNotSeen.stream()
-                    .filter(msg -> msg.getChannel().getId() == channelId)
-                    .toList();
-
-            for (Message message : messagesInChannel) {
-                Set<User> notSeenByUser = message.getSentTo().stream()
-                        .filter(user -> user.getId() == userId)
-                        .collect(Collectors.toSet());
-
-                message.getSentTo().removeAll(notSeenByUser);
-                messageRepository.save(message);
-            }
-
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -107,7 +71,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public boolean deleteMessage(Long id) throws JsonProcessingException {
+    public boolean deleteMessage(Long id) {
         if (messageExists(id)) {
 
             Message message = getMessage(id);

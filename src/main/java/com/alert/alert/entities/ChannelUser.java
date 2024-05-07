@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(fluent = true, chain = true)
 @NoArgsConstructor
-public class ChannelsUsers extends Auditable{
+public class ChannelUser extends Auditable{
 
     @EmbeddedId
     private ChannelsUsersKey id;
@@ -35,7 +35,7 @@ public class ChannelsUsers extends Auditable{
     @JsonView(Views.Public.class)
     private boolean canInvite = false;
 
-    public ChannelsUsers(Channel channel, User user) {
+    public ChannelUser(Channel channel, User user) {
         this.channel = channel;
         this.user = user;
         this.id = new ChannelsUsersKey(channel.getId(), user.getId());

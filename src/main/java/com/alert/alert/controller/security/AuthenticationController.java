@@ -1,4 +1,4 @@
-package com.alert.alert.controller;
+package com.alert.alert.controller.security;
 
 import com.alert.alert.payload.request.AuthenticationRequest;
 import com.alert.alert.payload.request.RefreshTokenRequest;

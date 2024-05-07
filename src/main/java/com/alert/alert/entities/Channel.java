@@ -33,7 +33,7 @@ public class Channel extends Auditable {
     private Boolean isPrivate = false;
 
     @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChannelsUsers> users = new ArrayList<>();
+    private List<ChannelUser> users = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_channel_id", referencedColumnName = "id")
@@ -44,15 +44,15 @@ public class Channel extends Auditable {
 
     public void addChannelUser(User user, boolean canEdit, boolean canDelete, boolean canView, boolean canInvite) {
 
-        ChannelsUsers channelsUsers = new ChannelsUsers(this, user);
+        ChannelUser channelsUsers = new ChannelUser(this, user);
         updateProperties(channelsUsers, canEdit, canDelete, canView, canInvite);
         users.add(channelsUsers);
     }
 
     public void removeChannelUser(User user) {
-        for (Iterator<ChannelsUsers> iterator = users.iterator();
+        for (Iterator<ChannelUser> iterator = users.iterator();
              iterator.hasNext(); ) {
-            ChannelsUsers channelsUsers = iterator.next();
+            ChannelUser channelsUsers = iterator.next();
 
             if(channelsUsers.user().equals(user)
                     && channelsUsers.channel().equals(this)) {
@@ -63,7 +63,7 @@ public class Channel extends Auditable {
         }
     }
 
-    public void updateProperties(ChannelsUsers channelsUsers,
+    public void updateProperties(ChannelUser channelsUsers,
                                  boolean canEdit, boolean canDelete, boolean canView, boolean canInvite) {
         channelsUsers
                 .canInvite(canInvite)

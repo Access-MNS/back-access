@@ -1,4 +1,4 @@
-package com.alert.alert.controller;
+package com.alert.alert.controller.messages;
 
 import com.alert.alert.entities.Message;
 import com.alert.alert.entities.Views;
@@ -32,27 +32,12 @@ public class MessageController {
         return messageService.getMessages();
     }
 
-    @GetMapping("/messages/deleted")
+    @GetMapping("/message/{id}")
     @JsonView(Views.Public.class)
-    Collection<Message> messagesDeleted() {
-        return messageService.getMessagesDeleted();
-    }
+    ResponseEntity<Message> getMessage(@PathVariable Long id) {
 
-    @GetMapping("/messages/not_seen/{userId}")
-    @JsonView(Views.Public.class)
-    Collection<Message> getMessagesNotSeen(@PathVariable Long userId) {
-        return messageService.getMessagesNotSeen(userId);
-    }
-
-    @DeleteMapping("/messages/not_seen/{userId}/{channelId}")
-    @JsonView(Views.Public.class)
-    public ResponseEntity<Message> deleteMessageNotSeen(@Validated
-                                                        @PathVariable Long userId,
-                                                        @PathVariable Long channelId) {
-
-        return messageService.deleteMessageNotSeen(userId, channelId)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        Message message = messageService.getMessage(id);
+        return returnMessage(message);
     }
 
     @GetMapping("/messages/{id}")
@@ -60,14 +45,6 @@ public class MessageController {
     Collection<Message> getMessagesInChannel(@PermissionCheck(PermissionType.VIEW) @PathVariable Long id) {
 
         return messageService.getMessagesInChannel(id);
-    }
-
-    @GetMapping("/message/{id}")
-    @JsonView(Views.Public.class)
-    ResponseEntity<Message> getMessage(@PathVariable Long id) {
-
-        Message message = messageService.getMessage(id);
-        return returnMessage(message);
     }
 
     @PostMapping("/messages/{channelId}")
@@ -91,7 +68,7 @@ public class MessageController {
 
     @DeleteMapping("messages/{id}")
     @JsonView(Views.Public.class)
-    public ResponseEntity<Message> deleteMessage(@PathVariable Long id) throws JsonProcessingException {
+    public ResponseEntity<Message> deleteMessage(@PathVariable Long id) {
 
         return messageService.deleteMessage(id)
                 ? ResponseEntity.ok().build()

@@ -12,14 +12,12 @@ public class ChannelRequest {
     @NotBlank(message = "Name can't be empty")
     private String name;
     private String description;
-    private Boolean isPrivate;
     private Channel parentChannelId;
 
     public Channel toChannel() {
         return new Channel()
                 .setName(name)
                 .setDescription(description)
-                .setIsPrivate(isPrivate)
                 .setParentChannelId(parentChannelId);
     }
 }
