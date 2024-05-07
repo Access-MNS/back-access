@@ -13,19 +13,6 @@ services:
     ports:
       - "3306:3306"
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_PASSWORD: root
-      PMA_USER: root
-    depends_on:
-      - db
-    ports:
-      - "8181:80"
-
   backend:
     depends_on:
       - db
