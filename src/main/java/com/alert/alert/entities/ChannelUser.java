@@ -24,6 +24,7 @@ public class ChannelUser extends Auditable{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
+    @JsonView(Views.Public.class)
     private User user;
 
     @JsonView(Views.Public.class)
