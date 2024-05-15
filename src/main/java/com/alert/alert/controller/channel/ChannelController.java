@@ -36,7 +36,6 @@ public class ChannelController {
     }
 
     @GetMapping("/channels")
-    @IsAdmin
     @JsonView(Views.Public.class)
     Collection<Channel> getChannels() {
         return channelService.getChannels();
