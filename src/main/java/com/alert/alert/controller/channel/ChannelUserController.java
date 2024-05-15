@@ -38,6 +38,11 @@ public class ChannelUserController {
         return channelsUsersService.getUsers(id);
     }
 
+    @GetMapping("/channelUsers/{channelId}")
+    @JsonView(Views.Public.class)
+    Collection<ChannelUser> getChannelUsers(@PathVariable Long channelId) {
+        return channelsUsersService.getUsersChannel(channelId);
+    }
 
     @GetMapping("channels/{id}")
     @JsonView(Views.Public.class)
