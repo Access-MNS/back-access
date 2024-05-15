@@ -13,6 +13,8 @@ import java.util.Set;
 @Repository
 public interface ChannelsUsersRepository extends JpaRepository<ChannelUser, Long> {
 
+    Set<ChannelUser> findAllByChannelId(Long channelId);
+
     Optional<ChannelUser> findByUserIdAndChannelId(Long userId, Long channelId);
 
     boolean existsByUserIdAndChannelId(Long userId, Long channelId);
