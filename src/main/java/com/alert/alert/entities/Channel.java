@@ -42,6 +42,19 @@ public class Channel extends Auditable {
     @OneToMany(mappedBy = "parentChannelId")
     private Set<Channel> childChannelsId = new HashSet<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
     public void addChannelUser(User user, boolean canEdit, boolean canDelete, boolean canView, boolean canInvite) {
 
         ChannelUser channelsUsers = new ChannelUser(this, user);
@@ -54,8 +67,7 @@ public class Channel extends Auditable {
              iterator.hasNext(); ) {
             ChannelUser channelsUsers = iterator.next();
 
-            if(channelsUsers.user().equals(user)
-                    && channelsUsers.channel().equals(this)) {
+            if(channelsUsers.user().equals(user) && channelsUsers.channel().equals(this)) {
                 iterator.remove();
                 channelsUsers.channel(null);
                 channelsUsers.user(null);
