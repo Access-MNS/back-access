@@ -55,7 +55,6 @@ public class ChannelController {
     }
 
     @DeleteMapping("/channels/{id}")
-    @IsAdmin
     @JsonView(Views.Public.class)
     public ResponseEntity<String> deleteChannel(@PermissionCheck(PermissionType.DELETE) @PathVariable Long id) {
 
