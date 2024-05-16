@@ -5,7 +5,6 @@ import com.alert.alert.entities.Views;
 import com.alert.alert.entities.enums.PermissionType;
 import com.alert.alert.payload.request.ChannelRequest;
 import com.alert.alert.service.impl.ChannelServiceImpl;
-import com.alert.alert.validation.IsAdmin;
 import com.alert.alert.validation.IsUser;
 import com.alert.alert.validation.PermissionCheck;
 import com.fasterxml.jackson.annotation.JsonView;
