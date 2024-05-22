@@ -25,12 +25,12 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Collection<Channel> getChannels() {
-        return channelRepository.findAll();
+        return channelRepository.findAllWhereIsNotDeleted();
     }
 
     @Override
     public Channel getChannel(Long id) {
-        return channelRepository.findById(id).orElse(null);
+        return channelRepository.findByIdWhereIsNotDeleted(id).orElse(null);
     }
 
     @Override
@@ -59,8 +59,10 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public boolean deleteChannel(Long id) {
-        if (channelExists(id)) {
-            channelRepository.deleteById(id);
+        Channel channel = channelRepository.findById(id).orElse(null);
+        if (channel != null) {
+            channel.setDeleted(true);
+            channelRepository.save(channel);
             return true;
         }
         return false;

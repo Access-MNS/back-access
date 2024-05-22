@@ -48,7 +48,7 @@ public class ChannelsUsersServiceImpl implements ChannelsUsersService {
 
     @Override
     public Set<Channel> getChannelsByUserId(Long userId) {
-        return channelsUsersRepository.getChannelsByUserId(userId);
+        return channelsUsersRepository.getChannelsByUserIdWhereIsNotDeleted(userId);
     }
 
     @Override

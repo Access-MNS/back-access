@@ -25,4 +25,7 @@ public interface ChannelsUsersRepository extends JpaRepository<ChannelUser, Long
     @Query("select c from Channel c left join ChannelUser cu on c.id = cu.id.channelId where cu.id.userId = :userId")
     Set<Channel> getChannelsByUserId(Long userId);
 
+    @Query("select c from Channel c left join ChannelUser cu on c.id = cu.id.channelId where c.isDeleted = false and cu.id.userId = :userId")
+    Set<Channel> getChannelsByUserIdWhereIsNotDeleted(Long userId);
+
 }

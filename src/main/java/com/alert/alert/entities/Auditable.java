@@ -7,6 +7,7 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -18,6 +19,7 @@ import java.util.Date;
 import static jakarta.persistence.TemporalType.TIMESTAMP;
 
 @EntityListeners(AuditingEntityListener.class)
+@Accessors(chain = true)
 @MappedSuperclass
 @Getter
 @Setter
@@ -44,5 +46,9 @@ public abstract class Auditable {
     @LastModifiedBy
     @JsonView(Views.Public.class)
     private String modifiedBy;
+
+    @Column(name = "is_deleted", nullable = false)
+    @JsonView(Views.Public.class)
+    private boolean isDeleted = false;
 }
 

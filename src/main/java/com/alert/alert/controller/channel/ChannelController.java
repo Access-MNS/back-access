@@ -57,9 +57,11 @@ public class ChannelController {
     @JsonView(Views.Public.class)
     public ResponseEntity<String> deleteChannel(@PermissionCheck(PermissionType.DELETE) @PathVariable Long id) {
 
-        return channelService.deleteChannel(id)
-                ? ResponseEntity.ok("Channel deleted")
-                : ResponseEntity.notFound().build();
+        if (channelService.deleteChannel(id)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     private ResponseEntity<Channel> returnChannel(Channel channel) {
