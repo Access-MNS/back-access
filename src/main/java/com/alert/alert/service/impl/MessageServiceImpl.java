@@ -80,8 +80,8 @@ public class MessageServiceImpl implements MessageService {
                     .setSender(message.getSender())
                     .setAction(message.getAction())
                     .setComment(message.getComment())
-                    .setDeleted(true)
-                    .setSentTo(null);
+                    .setSentTo(null)
+                    .setDeleted(true);
 
             messageRepository.save(message);
             return true;

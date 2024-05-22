@@ -55,7 +55,4 @@ public class Message extends Auditable{
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     Set<User> sentTo = new HashSet<>();
-
-    @JsonView(Views.Public.class)
-    boolean isDeleted = false;
 }
