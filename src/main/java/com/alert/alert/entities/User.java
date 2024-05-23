@@ -44,6 +44,8 @@ public class User extends Auditable implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private boolean isEnabled = false;
+
     @ManyToMany(mappedBy = "sentTo")
     private transient Set<Message> gotMessage = new HashSet<>();
 
@@ -73,6 +75,6 @@ public class User extends Auditable implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }

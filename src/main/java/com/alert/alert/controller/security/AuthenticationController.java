@@ -91,4 +91,12 @@ public class AuthenticationController {
                 .build();
 
     }
+
+    @GetMapping("/confirm-account/{confirmationToken}")
+    public ResponseEntity<?> confirmUserAccount(@PathVariable String confirmationToken) {
+        if (authenticationService.confirmEmail(confirmationToken)) {
+            return ResponseEntity.ok().body("Account has been activated successfully!");
+        }
+        return ResponseEntity.badRequest().body("Activation link is invalid or broken!");
+    }
 }
