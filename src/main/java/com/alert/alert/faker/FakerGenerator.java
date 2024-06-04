@@ -38,11 +38,11 @@ public class FakerGenerator {
         String role = faker.options().option("USER", "ADMIN");
 
         String insertQuery = "INSERT INTO users (password, mail, role, last_name, first_name, " +
-                "created_by, created_date, modified_by, modified_date, last_seen) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "created_by, created_date, modified_by, modified_date, last_seen, is_enabled, is_deleted)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(insertQuery, password, pseudo, role, lastName, firstName,
-                pseudo, new Date(), pseudo, new Date(), new Date());
+                pseudo, new Date(), pseudo, new Date(), new Date(), true, false);
     }
 
     private void insertFakeChannels(Faker faker, int i) {
@@ -52,10 +52,11 @@ public class FakerGenerator {
         int parent = faker.number().numberBetween(1, i);
 
         String insertQuery = "INSERT INTO channels (name, description, is_private, parent_channel_id, " +
-                "created_by, created_date, modified_by, modified_date) " +
-                "VALUES (?,?,?,?,?, ?,?,?)";
+                "created_by, created_date, modified_by, modified_date, is_deleted) " +
+                "VALUES (?,?,?,?,?, ?,?,?,?)";
 
-        jdbcTemplate.update(insertQuery, name, description, false, parent, creator, new Date(), creator, new Date());
+        jdbcTemplate.update(insertQuery, name, description, false, parent, creator,
+                new Date(), creator, new Date(), false);
     }
 
     //One group many users
@@ -68,11 +69,11 @@ public class FakerGenerator {
         String creator = faker.name().username();
 
         String insertQuery = "INSERT INTO channel_user (channel_id, user_id, can_edit, can_delete, " +
-                "can_invite, can_view, created_by, created_date, modified_by, modified_date) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?)";
+                "can_invite, can_view, created_by, created_date, modified_by, modified_date, is_deleted) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
         jdbcTemplate.update(insertQuery, channel, i, canEdit, canDelete, canInvite, canView,
-                creator, new Date(), creator, new Date());
+                creator, new Date(), creator, new Date(), false);
     }
 
     private void insertFakeMessages(Faker faker, int i) {
