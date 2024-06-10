@@ -10,6 +10,7 @@ import com.alert.alert.service.ChannelsUsersService;
 import com.alert.alert.validation.IsUser;
 import com.alert.alert.validation.PermissionCheck;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,40 +18,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/channel/")
 @IsUser
 public class ChannelUserController {
     private final ChannelsUsersService channelsUsersService;
 
+    @Autowired
     public ChannelUserController(ChannelsUsersService channelsUsersService) {
         this.channelsUsersService = channelsUsersService;
     }
 
-    @GetMapping("/channel/users/{idChannel}/{idUser}")
+    @GetMapping("/user/{idChannel}/{idUser}")
     @JsonView(Views.Public.class)
     ChannelUser getChannelUser(@PathVariable Long idChannel, @PathVariable Long idUser) {
         return channelsUsersService.getChannelUser(idUser, idChannel);
     }
 
-    @GetMapping("/channel/users/{id}")
+    @GetMapping("/user/{id}")
     @JsonView(Views.Public.class)
     Collection<User> getChannelsUsers(@PathVariable Long id) {
         return channelsUsersService.getUsers(id);
     }
 
-    @GetMapping("/channelUsers/{channelId}")
+    @GetMapping("/channel_user/{channelId}")
     @JsonView(Views.Public.class)
     Collection<ChannelUser> getChannelUsers(@PathVariable Long channelId) {
         return channelsUsersService.getUsersChannel(channelId);
     }
 
-    @GetMapping("channels/{id}")
+    @GetMapping("/list/{id}")
     @JsonView(Views.Public.class)
     Collection<Channel> getChannelsForUser(@PathVariable Long id) {
         return channelsUsersService.getChannelsByUserId(id);
     }
 
-    @PostMapping("/channels/{channelId}/{userId}")
+    @PostMapping("/{channelId}/{userId}")
     @JsonView(Views.Public.class)
     ResponseEntity<String> addUserToChannel(@Validated
                                             @PathVariable Long userId,
@@ -61,7 +63,7 @@ public class ChannelUserController {
                 : ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/channels/{channelId}/{userId}")
+    @PutMapping("/{channelId}/{userId}")
     @JsonView(Views.Public.class)
     ResponseEntity<Channel> updateUserFromChannel(@Validated
                                                   @PathVariable Long userId,
@@ -76,7 +78,7 @@ public class ChannelUserController {
                 : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/channels/{channelId}/{userId}")
+    @DeleteMapping("/{channelId}/{userId}")
     @JsonView(Views.Public.class)
     ResponseEntity<String> removeUserFromChannel(@Validated
                                                  @PathVariable Long userId,

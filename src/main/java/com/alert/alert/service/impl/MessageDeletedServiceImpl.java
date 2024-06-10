@@ -3,6 +3,7 @@ package com.alert.alert.service.impl;
 import com.alert.alert.entities.Message;
 import com.alert.alert.repositories.MessageRepository;
 import com.alert.alert.service.MessageDeletedService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -12,6 +13,7 @@ public class MessageDeletedServiceImpl implements MessageDeletedService {
 
     private final MessageRepository messageRepository;
 
+    @Autowired
     public MessageDeletedServiceImpl(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
     }

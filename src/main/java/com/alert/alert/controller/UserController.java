@@ -3,10 +3,12 @@ package com.alert.alert.controller;
 import com.alert.alert.entities.User;
 import com.alert.alert.entities.Views;
 import com.alert.alert.payload.request.UserRequest;
+import com.alert.alert.service.UserService;
 import com.alert.alert.service.impl.UserServiceImpl;
 import com.alert.alert.validation.IsAdmin;
 import com.alert.alert.validation.IsUser;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,23 +16,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 @IsUser
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
+    @Autowired
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping
     @JsonView(Views.Public.class)
     Collection<User> users() {
         return userService.getUsers();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     @JsonView(Views.Public.class)
     ResponseEntity<User> getUser(@PathVariable Long id) {
         User user = userService.getUser(id);
@@ -39,7 +42,7 @@ public class UserController {
                 : ResponseEntity.notFound().build();
     }
 
-    @PutMapping("users")
+    @PutMapping
     @JsonView(Views.Public.class)
     ResponseEntity<User> updateUser(@Validated @RequestBody UserRequest request) {
         return userService.updateUser(request.toUser())
@@ -47,7 +50,7 @@ public class UserController {
                 : ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping("user/{id}")
+    @DeleteMapping("/{id}")
     @IsAdmin
     @JsonView(Views.Public.class)
     public ResponseEntity<User> deleteUser(@PathVariable Long id) {

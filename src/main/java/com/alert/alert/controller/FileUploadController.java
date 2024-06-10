@@ -1,7 +1,7 @@
 package com.alert.alert.controller;
 
 import com.alert.alert.entities.Views;
-import com.alert.alert.service.impl.FileUploadServiceImpl;
+import com.alert.alert.service.FileUploadService;
 import com.alert.alert.validation.IsUser;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.List;
 @IsUser
 public class FileUploadController {
 
-    private final FileUploadServiceImpl fileUploadService;
+    private final FileUploadService fileUploadService;
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg");
 
     @PostMapping(value = "/channel/{channelId}", consumes = "multipart/form-data")

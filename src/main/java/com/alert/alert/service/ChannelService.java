@@ -10,4 +10,5 @@ public interface ChannelService {
     Channel createChannel(Channel channel);
     Channel updateChannel(Channel channel);
     boolean deleteChannel(Long id);
+    boolean channelExists (Long id);
 }

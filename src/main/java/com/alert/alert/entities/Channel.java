@@ -11,11 +11,9 @@ import lombok.experimental.Accessors;
 import java.util.*;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @Accessors(chain = true)
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "channels")
 public class Channel extends Auditable {
 

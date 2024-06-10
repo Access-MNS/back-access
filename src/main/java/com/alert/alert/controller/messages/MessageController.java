@@ -4,11 +4,13 @@ import com.alert.alert.entities.Message;
 import com.alert.alert.entities.Views;
 import com.alert.alert.entities.enums.PermissionType;
 import com.alert.alert.payload.request.MessageRequest;
+import com.alert.alert.service.MessageService;
 import com.alert.alert.service.impl.MessageServiceImpl;
-import com.alert.alert.validation.PermissionCheck;
 import com.alert.alert.validation.IsUser;
+import com.alert.alert.validation.PermissionCheck;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,23 +18,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/message")
 @IsUser
 public class MessageController {
 
-    private final MessageServiceImpl messageService;
+    private final MessageService messageService;
 
+    @Autowired
     public MessageController(MessageServiceImpl messageService) {
         this.messageService = messageService;
     }
 
-    @GetMapping("/messages")
+    @GetMapping
     @JsonView(Views.Public.class)
     Collection<Message> messages() {
         return messageService.getMessages();
     }
 
-    @GetMapping("/message/{id}")
+    @GetMapping("/{id}")
     @JsonView(Views.Public.class)
     ResponseEntity<Message> getMessage(@PathVariable Long id) {
 
@@ -40,14 +43,14 @@ public class MessageController {
         return returnMessage(message);
     }
 
-    @GetMapping("/messages/{id}")
+    @GetMapping("/channel/{id}")
     @JsonView(Views.Public.class)
     Collection<Message> getMessagesInChannel(@PermissionCheck(PermissionType.VIEW) @PathVariable Long id) {
 
         return messageService.getMessagesInChannel(id);
     }
 
-    @PostMapping("/messages/{channelId}")
+    @PostMapping("/{channelId}")
     @JsonView(Views.Public.class)
     ResponseEntity<Message> createMessage(@Validated
                                           @RequestBody MessageRequest messageRequest,
@@ -57,7 +60,7 @@ public class MessageController {
         return returnMessage(message);
     }
 
-    @PutMapping("messages/{messageId}")
+    @PutMapping("/{messageId}")
     @JsonView(Views.Public.class)
     ResponseEntity<Message> updateMessage(@PathVariable Long messageId,
                                           @RequestBody String messageText) throws JsonProcessingException {
@@ -66,9 +69,9 @@ public class MessageController {
         return returnMessage(message);
     }
 
-    @DeleteMapping("messages/{id}")
+    @DeleteMapping("/{id}")
     @JsonView(Views.Public.class)
-    public ResponseEntity<Message> deleteMessage(@PathVariable Long id) {
+    public ResponseEntity<Message> deleteMessage(@PathVariable Long id) throws JsonProcessingException {
 
         return messageService.deleteMessage(id)
                 ? ResponseEntity.ok().build()

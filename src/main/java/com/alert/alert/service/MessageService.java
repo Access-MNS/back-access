@@ -12,4 +12,5 @@ public interface MessageService {
     Message createMessage(Message messages, Long channelId);
     Message updateMessage(Long id, String text) throws JsonProcessingException;
     boolean deleteMessage(Long id) throws JsonProcessingException;
+    boolean messageExists(Long id);
 }

@@ -3,8 +3,9 @@ package com.alert.alert.service.impl;
 import com.alert.alert.entities.Channel;
 import com.alert.alert.entities.User;
 import com.alert.alert.repositories.ChannelRepository;
-import com.alert.alert.repositories.ChannelsUsersRepository;
 import com.alert.alert.service.ChannelService;
+import com.alert.alert.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +14,11 @@ import java.util.Collection;
 @Service
 public class ChannelServiceImpl implements ChannelService {
 
-    private final ChannelsUsersRepository channelsUsersRepository;
     private final ChannelRepository channelRepository;
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public ChannelServiceImpl(ChannelsUsersRepository channelsUsersRepository, ChannelRepository channelRepository, UserServiceImpl userService) {
-        this.channelsUsersRepository = channelsUsersRepository;
+    @Autowired
+    public ChannelServiceImpl(ChannelRepository channelRepository, UserServiceImpl userService) {
         this.channelRepository = channelRepository;
         this.userService = userService;
     }
@@ -54,7 +54,9 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Channel updateChannel(Channel channel) {
-        return channelExists(channel.getId()) ? channelRepository.save(channel) : null;
+        return channelExists(channel.getId())
+                ? channelRepository.save(channel)
+                : null;
     }
 
     @Override
@@ -68,11 +70,8 @@ public class ChannelServiceImpl implements ChannelService {
         return false;
     }
 
-    private boolean channelExists (Long id) {
+    @Override
+    public boolean channelExists(Long id) {
         return channelRepository.existsById(id);
-    }
-
-    public boolean channelUserExists(Long userId, Long channelId) {
-        return channelsUsersRepository.existsByUserIdAndChannelId(userId, channelId);
     }
 }

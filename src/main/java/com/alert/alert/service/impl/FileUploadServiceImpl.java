@@ -6,7 +6,10 @@ import com.alert.alert.entities.enums.Action;
 import com.alert.alert.repositories.ChannelRepository;
 import com.alert.alert.repositories.DocumentRepository;
 import com.alert.alert.repositories.UserRepository;
+import com.alert.alert.service.ChannelService;
 import com.alert.alert.service.FileUploadService;
+import com.alert.alert.service.MessageService;
+import com.alert.alert.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,9 +25,9 @@ public class FileUploadServiceImpl implements FileUploadService {
     private final DocumentRepository documentRepository;
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
-    private final ChannelServiceImpl channelService;
-    private final MessageServiceImpl messageService;
-    private final UserServiceImpl userService;
+    private final ChannelService channelService;
+    private final MessageService messageService;
+    private final UserService userService;
 
     @Override
     public boolean saveFileInDatabase(MultipartFile file, Long channelId) throws IOException {

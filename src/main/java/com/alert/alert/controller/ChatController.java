@@ -1,8 +1,9 @@
 package com.alert.alert.controller;
 
 import com.alert.alert.entities.Message;
-import com.alert.alert.service.impl.ChannelsUsersServiceImpl;
-import com.alert.alert.service.impl.MessageServiceImpl;
+import com.alert.alert.service.ChannelsUsersService;
+import com.alert.alert.service.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -11,8 +12,14 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ChatController {
 
-    MessageServiceImpl messageService;
-    ChannelsUsersServiceImpl channelService;
+    MessageService messageService;
+    ChannelsUsersService channelService;
+
+    @Autowired
+    public ChatController(MessageService messageService, ChannelsUsersService channelService) {
+        this.messageService = messageService;
+        this.channelService = channelService;
+    }
 
     @MessageMapping("/chat/{channelId}/sendMessage")
     public void sendMessage(@Payload Message message, @DestinationVariable("channelId") Long channelId) {

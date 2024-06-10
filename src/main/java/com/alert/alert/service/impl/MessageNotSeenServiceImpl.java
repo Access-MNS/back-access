@@ -3,7 +3,9 @@ package com.alert.alert.service.impl;
 import com.alert.alert.entities.Message;
 import com.alert.alert.entities.User;
 import com.alert.alert.repositories.MessageRepository;
+import com.alert.alert.service.ChannelsUsersService;
 import com.alert.alert.service.MessageNotSeenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -15,11 +17,12 @@ import java.util.stream.Collectors;
 public class MessageNotSeenServiceImpl implements MessageNotSeenService {
 
     private final MessageRepository messageRepository;
-    private final ChannelServiceImpl channelService;
+    private final ChannelsUsersService channelUserService;
 
-    public MessageNotSeenServiceImpl(MessageRepository messageRepository, ChannelServiceImpl channelService) {
+    @Autowired
+    public MessageNotSeenServiceImpl(MessageRepository messageRepository, ChannelsUsersService channelUserService) {
         this.messageRepository = messageRepository;
-        this.channelService = channelService;
+        this.channelUserService = channelUserService;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class MessageNotSeenServiceImpl implements MessageNotSeenService {
 
     @Override
     public boolean deleteMessageNotSeen(Long userId, Long channelId) {
-        if (channelService.channelUserExists(userId, channelId)) {
+        if (channelUserService.channelUserExists(userId, channelId)) {
 
             Collection<Message> messagesNotSeen = getMessagesNotSeen(userId);
             List<Message> messagesInChannel = messagesNotSeen.stream()

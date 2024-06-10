@@ -3,6 +3,7 @@ package com.alert.alert.service.impl;
 import com.alert.alert.entities.User;
 import com.alert.alert.repositories.UserRepository;
 import com.alert.alert.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -12,6 +13,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -44,7 +46,8 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-    private boolean userExists(Long id) {
+    @Override
+    public boolean userExists(Long id) {
         return userRepository.existsById(id);
     }
 }

@@ -9,4 +9,5 @@ public interface UserService {
     User getUser(Long id);
     boolean updateUser(User user);
     boolean deleteUser(Long id);
+    boolean userExists(Long id);
 }

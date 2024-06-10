@@ -5,8 +5,10 @@ import com.alert.alert.entities.ChannelUser;
 import com.alert.alert.entities.User;
 import com.alert.alert.repositories.ChannelRepository;
 import com.alert.alert.repositories.ChannelsUsersRepository;
-import com.alert.alert.repositories.UserRepository;
+import com.alert.alert.service.ChannelService;
 import com.alert.alert.service.ChannelsUsersService;
+import com.alert.alert.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,16 +17,14 @@ import java.util.Set;
 @Service
 public class ChannelsUsersServiceImpl implements ChannelsUsersService {
 
-    private final UserServiceImpl userService;
-    private final UserRepository userRepository;
-    private final ChannelServiceImpl channelService;
+    private final UserService userService;
+    private final ChannelService channelService;
     private final ChannelRepository channelRepository;
     private final ChannelsUsersRepository channelsUsersRepository;
 
-
-    public ChannelsUsersServiceImpl(UserServiceImpl userService, UserRepository userRepository, ChannelServiceImpl channelService, ChannelRepository channelRepository, ChannelsUsersRepository channelsUsersRepository) {
+    @Autowired
+    public ChannelsUsersServiceImpl(UserServiceImpl userService, ChannelServiceImpl channelService, ChannelRepository channelRepository, ChannelsUsersRepository channelsUsersRepository) {
         this.userService = userService;
-        this.userRepository = userRepository;
         this.channelService = channelService;
         this.channelRepository = channelRepository;
         this.channelsUsersRepository = channelsUsersRepository;
@@ -53,7 +53,9 @@ public class ChannelsUsersServiceImpl implements ChannelsUsersService {
 
     @Override
     public boolean addUserToChannel(Long userId, Long channelId) {
-        if (channelExists(channelId) && userExists(userId) && !channelUserExists(userId, channelId)) {
+        if (channelService.channelExists(channelId)
+                && userService.userExists(userId)
+                && !channelUserExists(userId, channelId)) {
 
             Channel channel = channelService.getChannel(channelId);
             User user = userService.getUser(userId);
@@ -69,7 +71,8 @@ public class ChannelsUsersServiceImpl implements ChannelsUsersService {
     public Channel updateUserFromChannel(Long userId, Long channelId,
                                          boolean canEdit, boolean canDelete, boolean canView, boolean canInvite){
 
-        if (channelExists(channelId) && userExists(userId)){
+        if (channelService.channelExists(channelId)
+                && userService.userExists(userId)){
 
             Channel channel = channelService.getChannel(channelId);
             channel.updateProperties(getChannelUser(userId, channelId),
@@ -81,7 +84,7 @@ public class ChannelsUsersServiceImpl implements ChannelsUsersService {
 
     @Override
     public boolean removeUserFromChannel(Long userId, Long channelId) {
-        if (channelExists(channelId) && userExists(userId)) {
+        if (channelService.channelExists(channelId) && userService.userExists(userId)) {
 
             Channel channel = channelService.getChannel(channelId);
             channel.removeChannelUser(userService.getUser(userId));
@@ -91,14 +94,7 @@ public class ChannelsUsersServiceImpl implements ChannelsUsersService {
         return false;
     }
 
-    private boolean userExists(Long id) {
-        return userRepository.existsById(id);
-    }
-
-    private boolean channelExists (Long id) {
-        return channelRepository.existsById(id);
-    }
-
+    @Override
     public boolean channelUserExists(Long userId, Long channelId) {
         return channelsUsersRepository.existsByUserIdAndChannelId(userId, channelId);
     }

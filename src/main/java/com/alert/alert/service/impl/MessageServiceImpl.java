@@ -3,10 +3,14 @@ package com.alert.alert.service.impl;
 import com.alert.alert.entities.Message;
 import com.alert.alert.entities.User;
 import com.alert.alert.repositories.MessageRepository;
+import com.alert.alert.service.ChannelService;
+import com.alert.alert.service.ChannelsUsersService;
 import com.alert.alert.service.MessageService;
+import com.alert.alert.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +19,16 @@ import java.util.Collection;
 @Service
 public class MessageServiceImpl implements MessageService {
 
-    private final ChannelServiceImpl channelService;
-    private final ChannelsUsersServiceImpl channelsUsersService;
+    private final ChannelsUsersService channelsUsersService;
     private final MessageRepository messageRepository;
-    private final UserServiceImpl userService;
+    private final ChannelService channelService;
+    private final UserService userService;
 
-    public MessageServiceImpl(ChannelServiceImpl channelService, ChannelsUsersServiceImpl channelsUsersService, MessageRepository messageRepository, UserServiceImpl userService) {
-        this.channelService = channelService;
+    @Autowired
+    public MessageServiceImpl(ChannelsUsersService channelsUsersService, MessageRepository messageRepository, ChannelService channelService, UserService userService) {
         this.channelsUsersService = channelsUsersService;
         this.messageRepository = messageRepository;
+        this.channelService = channelService;
         this.userService = userService;
     }
 
@@ -39,8 +44,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message getMessage(Long id) {
-        return messageRepository.findById(id)
-                .orElse(null);
+        return messageRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -89,7 +93,8 @@ public class MessageServiceImpl implements MessageService {
         return false;
     }
 
-    private boolean messageExists(Long id) {
+    @Override
+    public boolean messageExists(Long id) {
         return messageRepository.existsById(id);
     }
 }
