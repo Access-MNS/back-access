@@ -1,6 +1,6 @@
 package com.alert.alert.payload.response;
 
-import com.alert.alert.entities.enums.TokenType;
+import com.alert.alert.entity.enums.TokenType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

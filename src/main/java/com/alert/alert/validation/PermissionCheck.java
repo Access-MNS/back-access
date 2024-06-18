@@ -1,6 +1,6 @@
 package com.alert.alert.validation;
 
-import com.alert.alert.entities.enums.PermissionType;
+import com.alert.alert.entity.enums.PermissionType;
 import com.alert.alert.validation.Validators.PermissionValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

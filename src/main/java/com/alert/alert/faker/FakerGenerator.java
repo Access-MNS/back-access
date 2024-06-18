@@ -59,7 +59,6 @@ public class FakerGenerator {
                 new Date(), creator, new Date(), false);
     }
 
-    //One group many users
     private void insertFakeChannelUser(Faker faker, int i) {
         int channel = faker.number().numberBetween(1, i);
         boolean canEdit = faker.bool().bool();

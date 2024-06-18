@@ -1,6 +1,6 @@
 package com.alert.alert.payload.request;
 
-import com.alert.alert.entities.enums.Role;
+import com.alert.alert.entity.enums.Role;
 import com.alert.alert.validation.StrongPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

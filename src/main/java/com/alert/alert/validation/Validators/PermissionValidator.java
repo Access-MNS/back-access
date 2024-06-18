@@ -1,9 +1,9 @@
 package com.alert.alert.validation.Validators;
 
-import com.alert.alert.entities.ChannelUser;
-import com.alert.alert.entities.User;
-import com.alert.alert.entities.enums.PermissionType;
-import com.alert.alert.service.impl.ChannelsUsersServiceImpl;
+import com.alert.alert.entity.ChannelUser;
+import com.alert.alert.entity.User;
+import com.alert.alert.entity.enums.PermissionType;
+import com.alert.alert.service.impl.channel.ChannelsUsersServiceImpl;
 import com.alert.alert.validation.PermissionCheck;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

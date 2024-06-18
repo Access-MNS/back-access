@@ -1,6 +1,6 @@
 package com.alert.alert.payload.request;
 
-import com.alert.alert.entities.Channel;
+import com.alert.alert.entity.Channel;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;

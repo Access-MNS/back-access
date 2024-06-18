@@ -1,6 +1,6 @@
 package com.alert.alert.config;
 
-import com.alert.alert.repositories.UserRepository;
+import com.alert.alert.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

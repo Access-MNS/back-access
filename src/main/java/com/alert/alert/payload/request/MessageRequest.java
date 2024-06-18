@@ -1,7 +1,7 @@
 package com.alert.alert.payload.request;
 
-import com.alert.alert.entities.Message;
-import com.alert.alert.entities.enums.Action;
+import com.alert.alert.entity.Message;
+import com.alert.alert.entity.enums.Action;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;

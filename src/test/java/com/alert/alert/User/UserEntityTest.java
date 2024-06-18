@@ -1,7 +1,7 @@
 package com.alert.alert.User;
 
-import com.alert.alert.entities.User;
-import com.alert.alert.entities.enums.Role;
+import com.alert.alert.entity.User;
+import com.alert.alert.entity.enums.Role;
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

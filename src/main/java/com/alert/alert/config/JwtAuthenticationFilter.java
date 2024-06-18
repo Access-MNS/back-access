@@ -1,6 +1,6 @@
 package com.alert.alert.config;
 
-import com.alert.alert.service.JwtService;
+import com.alert.alert.service.security.JwtService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

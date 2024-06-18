@@ -1,10 +1,10 @@
 package com.alert.alert.controller.channel;
 
-import com.alert.alert.entities.Channel;
-import com.alert.alert.entities.Views;
+import com.alert.alert.entity.Channel;
+import com.alert.alert.entity.Views;
 import com.alert.alert.payload.request.ChannelRequest;
-import com.alert.alert.service.ChannelPrivateService;
-import com.alert.alert.service.impl.ChannelPrivateServiceImpl;
+import com.alert.alert.service.channel.ChannelPrivateService;
+import com.alert.alert.service.impl.channel.ChannelPrivateServiceImpl;
 import com.alert.alert.validation.IsUser;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;

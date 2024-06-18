@@ -1,6 +1,6 @@
 package com.alert.alert.handlers;
 
-import com.alert.alert.exceptions.TokenException;
+import com.alert.alert.exception.TokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

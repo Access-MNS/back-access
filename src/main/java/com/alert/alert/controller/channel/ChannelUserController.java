@@ -1,12 +1,12 @@
 package com.alert.alert.controller.channel;
 
-import com.alert.alert.entities.Channel;
-import com.alert.alert.entities.ChannelUser;
-import com.alert.alert.entities.User;
-import com.alert.alert.entities.Views;
-import com.alert.alert.entities.enums.PermissionType;
+import com.alert.alert.entity.Channel;
+import com.alert.alert.entity.ChannelUser;
+import com.alert.alert.entity.User;
+import com.alert.alert.entity.Views;
+import com.alert.alert.entity.enums.PermissionType;
 import com.alert.alert.payload.request.UpdateChannelUserRequest;
-import com.alert.alert.service.ChannelsUsersService;
+import com.alert.alert.service.channel.ChannelsUsersService;
 import com.alert.alert.validation.IsUser;
 import com.alert.alert.validation.PermissionCheck;
 import com.fasterxml.jackson.annotation.JsonView;
