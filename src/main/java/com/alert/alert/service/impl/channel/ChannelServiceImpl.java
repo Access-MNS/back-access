@@ -54,8 +54,9 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Channel updateChannel(Channel channel) {
-        return channelExists(channel.getId())
+    public Channel updateChannel(Long id, Channel channel) {
+        channel.setId(id);
+        return channelExists(id)
                 ? channelRepository.save(channel)
                 : null;
     }

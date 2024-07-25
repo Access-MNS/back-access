@@ -48,10 +48,10 @@ public class ChannelController {
         return returnChannel(channelService.createChannel(channelRequest.toChannel()));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @JsonView(Views.Public.class)
-    ResponseEntity<Channel> updateChannel(@Validated @RequestBody ChannelRequest channelRequest) {
-        return returnChannel(channelService.updateChannel(channelRequest.toChannel()));
+    ResponseEntity<Channel> updateChannel(@PathVariable Long id,@Validated @RequestBody ChannelRequest channelRequest) {
+        return returnChannel(channelService.updateChannel(id, channelRequest.toChannel()));
     }
 
     @DeleteMapping("/{id}")

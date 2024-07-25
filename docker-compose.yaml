@@ -1,33 +1,30 @@
+
 version: '3'
+
 services:
   db:
     image: mysql:latest
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: my_secret_password
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_user_pass
+    ports:
+      - "6033:3306"
     volumes:
-      - db_data:/var/lib/mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: alert
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-    ports:
-      - "3306:3306"
-
-  backend:
-    depends_on:
+      - dbdata:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
       - db
-    image: alertmns:latest
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/alert?serverTimezone=UTC&createDatabaseIfNotExist=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_JPA_SHOW-SQL: "true"
-      SPRING_JPA_HIBERNATE_DDL-AUTO: "update"
-      SECRET_KEY: "586B633834416E396D7436753879382F423F4428482B4C6250655367566B5970"
-      JWT_EXPIRATION: "900000"
-      REFRESH_TOKEN_EXPIRATION: "1296000000"
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
     ports:
-      - "8080:8080"
-
+      - 8081:80
 volumes:
-  db_data: {}
+  dbdata:

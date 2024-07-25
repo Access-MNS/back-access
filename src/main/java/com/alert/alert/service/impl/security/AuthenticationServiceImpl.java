@@ -45,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
-                .mail(request.getEmail())
+                .mail(request.getMail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
@@ -82,9 +82,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+                new UsernamePasswordAuthenticationToken(request.getMail(), request.getPassword()));
 
-        var user = userRepository.findByMail(request.getEmail())
+        var user = userRepository.findByMail(request.getMail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
         var roles = user.getRole().getAuthorities()
                 .stream()
