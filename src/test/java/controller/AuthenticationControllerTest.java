@@ -18,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 
 import java.util.List;
 
@@ -33,9 +32,6 @@ public class AuthenticationControllerTest {
 
     @Mock
     private RefreshTokenService refreshTokenService;
-
-    @Mock
-    private AuthenticationManager authenticationManager;
 
     @Mock
     private JwtService jwtService;
