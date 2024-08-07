@@ -2,10 +2,7 @@ package service;
 
 import com.alert.alert.entity.Message;
 import com.alert.alert.repository.MessageRepository;
-import com.alert.alert.service.channel.ChannelService;
-import com.alert.alert.service.channel.ChannelsUsersService;
 import com.alert.alert.service.impl.message.MessageServiceImpl;
-import com.alert.alert.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,16 +22,7 @@ import static org.mockito.Mockito.*;
 public class MessageServiceImplTest {
 
     @Mock
-    private ChannelsUsersService channelsUsersService;
-
-    @Mock
     private MessageRepository messageRepository;
-
-    @Mock
-    private ChannelService channelService;
-
-    @Mock
-    private UserService userService;
 
     @InjectMocks
     private MessageServiceImpl messageService;
