@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertFalse;
 
 public class UserEntityTest {
 
@@ -43,6 +44,6 @@ public class UserEntityTest {
         assertTrue(user.isAccountNonExpired());
         assertTrue(user.isAccountNonLocked());
         assertTrue(user.isCredentialsNonExpired());
-        assertTrue(user.isEnabled());
+        assertFalse(user.isEnabled());
     }
 }
