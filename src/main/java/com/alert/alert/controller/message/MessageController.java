@@ -31,13 +31,13 @@ public class MessageController {
 
     @GetMapping
     @JsonView(Views.Public.class)
-    Collection<Message> messages() {
+    public Collection<Message> messages() {
         return messageService.getMessages();
     }
 
     @GetMapping("/{id}")
     @JsonView(Views.Public.class)
-    ResponseEntity<Message> getMessage(@PathVariable Long id) {
+    public ResponseEntity<Message> getMessage(@PathVariable Long id) {
 
         Message message = messageService.getMessage(id);
         return returnMessage(message);
@@ -52,9 +52,9 @@ public class MessageController {
 
     @PostMapping("/{channelId}")
     @JsonView(Views.Public.class)
-    ResponseEntity<Message> createMessage(@Validated
-                                          @RequestBody MessageRequest messageRequest,
-                                          @PermissionCheck(PermissionType.VIEW) @PathVariable Long channelId) {
+    public ResponseEntity<Message> createMessage(@Validated
+                                                 @RequestBody MessageRequest messageRequest,
+                                                 @PermissionCheck(PermissionType.VIEW) @PathVariable Long channelId) {
 
         Message message = messageService.createMessage(messageRequest.toMessage(), channelId);
         return returnMessage(message);
@@ -62,8 +62,8 @@ public class MessageController {
 
     @PutMapping("/{messageId}")
     @JsonView(Views.Public.class)
-    ResponseEntity<Message> updateMessage(@PathVariable Long messageId,
-                                          @RequestBody String messageText) throws JsonProcessingException {
+    public ResponseEntity<Message> updateMessage(@PathVariable Long messageId,
+                                                 @RequestBody String messageText) throws JsonProcessingException {
 
         Message message = messageService.updateMessage(messageId, messageText);
         return returnMessage(message);

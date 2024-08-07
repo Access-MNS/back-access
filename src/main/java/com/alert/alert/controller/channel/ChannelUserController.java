@@ -30,33 +30,33 @@ public class ChannelUserController {
 
     @GetMapping("/user/{idChannel}/{idUser}")
     @JsonView(Views.Public.class)
-    ChannelUser getChannelUser(@PathVariable Long idChannel, @PathVariable Long idUser) {
+    public ChannelUser getChannelUser(@PathVariable Long idChannel, @PathVariable Long idUser) {
         return channelsUsersService.getChannelUser(idUser, idChannel);
     }
 
     @GetMapping("/user/{id}")
     @JsonView(Views.Public.class)
-    Collection<User> getChannelsUsers(@PathVariable Long id) {
+    public Collection<User> getChannelsUsers(@PathVariable Long id) {
         return channelsUsersService.getUsers(id);
     }
 
     @GetMapping("/channel_user/{channelId}")
     @JsonView(Views.Public.class)
-    Collection<ChannelUser> getChannelUsers(@PathVariable Long channelId) {
+    public Collection<ChannelUser> getChannelUsers(@PathVariable Long channelId) {
         return channelsUsersService.getUsersChannel(channelId);
     }
 
     @GetMapping("/list/{id}")
     @JsonView(Views.Public.class)
-    Collection<Channel> getChannelsForUser(@PathVariable Long id) {
+    public Collection<Channel> getChannelsForUser(@PathVariable Long id) {
         return channelsUsersService.getChannelsByUserId(id);
     }
 
     @PostMapping("/{channelId}/{userId}")
     @JsonView(Views.Public.class)
-    ResponseEntity<String> addUserToChannel(@Validated
-                                            @PathVariable Long userId,
-                                            @PermissionCheck(PermissionType.INVITE) @PathVariable Long channelId) {
+    public ResponseEntity<String> addUserToChannel(@Validated
+                                                   @PathVariable Long userId,
+                                                   @PermissionCheck(PermissionType.INVITE) @PathVariable Long channelId) {
 
         return channelsUsersService.addUserToChannel(userId, channelId)
                 ? ResponseEntity.ok("User successfully added")
@@ -65,10 +65,10 @@ public class ChannelUserController {
 
     @PutMapping("/{channelId}/{userId}")
     @JsonView(Views.Public.class)
-    ResponseEntity<Channel> updateUserFromChannel(@Validated
-                                                  @PathVariable Long userId,
-                                                  @PermissionCheck(PermissionType.EDIT) @PathVariable Long channelId,
-                                                  @RequestBody UpdateChannelUserRequest user) {
+    public ResponseEntity<Channel> updateUserFromChannel(@Validated
+                                                         @PathVariable Long userId,
+                                                         @PermissionCheck(PermissionType.EDIT) @PathVariable Long channelId,
+                                                         @RequestBody UpdateChannelUserRequest user) {
 
         Channel channel = channelsUsersService.updateUserFromChannel(userId, channelId,
                 user.isCanEdit(), user.isCanDelete(), user.isCanView(), user.isCanInvite());
@@ -80,9 +80,9 @@ public class ChannelUserController {
 
     @DeleteMapping("/{channelId}/{userId}")
     @JsonView(Views.Public.class)
-    ResponseEntity<String> removeUserFromChannel(@Validated
-                                                 @PathVariable Long userId,
-                                                 @PermissionCheck(PermissionType.DELETE) @PathVariable Long channelId) {
+    public ResponseEntity<String> removeUserFromChannel(@Validated
+                                                        @PathVariable Long userId,
+                                                        @PermissionCheck(PermissionType.DELETE) @PathVariable Long channelId) {
 
         return channelsUsersService.removeUserFromChannel(userId, channelId)
                 ? ResponseEntity.ok("User successfully deleted from channel")

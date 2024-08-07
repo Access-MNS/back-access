@@ -24,13 +24,13 @@ import java.util.function.Function;
 public class JwtServiceImpl implements JwtService {
 
     @Value("${application.security.jwt.secret-key}")
-    private String secretKey;
+    public String secretKey;
     @Value("${application.security.jwt.expiration}")
-    private long jwtExpiration;
+    public long jwtExpiration;
     @Value("${application.security.jwt.refresh-token.expiration}")
-    private long refreshTokenExpiration;
+    public long refreshTokenExpiration;
     @Value("${application.security.jwt.cookie-name}")
-    private String jwtCookieName;
+    public String jwtCookieName;
 
 
     @Override
@@ -49,7 +49,7 @@ public class JwtServiceImpl implements JwtService {
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
