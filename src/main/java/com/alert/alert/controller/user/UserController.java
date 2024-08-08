@@ -44,9 +44,9 @@ public class UserController {
 
     @PutMapping
     @JsonView(Views.Public.class)
-    ResponseEntity<User> updateUser(@Validated @RequestBody UserRequest request) {
-        return userService.updateUser(request.toUser())
-                ? ResponseEntity.ok(request.toUser())
+    ResponseEntity<User> updateUser(@Validated @RequestBody User user) {
+        return userService.updateUser(user)
+                ? ResponseEntity.ok(user)
                 : ResponseEntity.badRequest().build();
     }
 

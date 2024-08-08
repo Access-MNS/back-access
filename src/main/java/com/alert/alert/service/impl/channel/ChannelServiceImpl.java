@@ -2,6 +2,9 @@ package com.alert.alert.service.impl.channel;
 
 import com.alert.alert.entity.Channel;
 import com.alert.alert.entity.User;
+import com.alert.alert.exception.ChannelAlreadyExistsException;
+import com.alert.alert.exception.ChannelSaveException;
+import com.alert.alert.exception.ParentChannelNotFoundException;
 import com.alert.alert.repository.ChannelRepository;
 import com.alert.alert.service.channel.ChannelService;
 import com.alert.alert.service.impl.user.UserServiceImpl;
@@ -34,23 +37,30 @@ public class ChannelServiceImpl implements ChannelService {
         return channelRepository.findByIdWhereIsNotDeleted(id).orElse(null);
     }
 
+
     @Override
     public Channel createChannel(Channel channel) {
-        if (!channelExists(channel.getId())
-                && (channel.getParentChannelId() == null
-                || channelExists(channel.getParentChannelId().getId()))) {
+        if (channelExists(channel.getId())) {
+            throw new ChannelAlreadyExistsException("Le salon existe déjà. ID du salon : " + channel.getId());
+        }
 
+        if (channel.getParentChannelId() != null && !channelExists(channel.getParentChannelId().getId())) {
+            throw new ParentChannelNotFoundException("Salon parent n'existe pas. ID du salon parent : " + channel.getParentChannelId().getId());
+        }
+
+        try {
             channel.addChannelUser(userService.getUser(
-                    ((User) SecurityContextHolder
-                            .getContext()
-                            .getAuthentication()
-                            .getPrincipal())
-                            .getId()
+                            ((User) SecurityContextHolder
+                                    .getContext()
+                                    .getAuthentication()
+                                    .getPrincipal())
+                                    .getId()
                     ),
                     true, true, true, true);
             return channelRepository.save(channel);
+        } catch (Exception e) {
+            throw new ChannelSaveException("Erreur dans la sauvegarde du salon: " + e.getMessage(), e);
         }
-        return null;
     }
 
     @Override

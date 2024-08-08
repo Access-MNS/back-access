@@ -1,7 +1,11 @@
 package com.alert.alert.service.impl.message;
 
+import com.alert.alert.entity.Channel;
 import com.alert.alert.entity.Message;
 import com.alert.alert.entity.User;
+import com.alert.alert.exception.ChannelNotFoundException;
+import com.alert.alert.exception.MessageSaveException;
+import com.alert.alert.exception.UserNotFoundException;
 import com.alert.alert.repository.MessageRepository;
 import com.alert.alert.service.channel.ChannelService;
 import com.alert.alert.service.channel.ChannelsUsersService;
@@ -47,8 +51,7 @@ public class MessageServiceImpl implements MessageService {
         return messageRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public Message createMessage(Message message, Long channelId) {
+    public Message creteMessage(Message message, Long channelId) {
         if (!messageExists(message.getId())) {
 
             message.setChannel(channelService.getChannel(channelId))
@@ -57,6 +60,27 @@ public class MessageServiceImpl implements MessageService {
             return messageRepository.save(message);
         }
         return null;
+    }
+
+    @Override
+    public Message createMessage(Message message, Long channelId) {
+
+        try {
+            Channel channel = channelService.getChannel(channelId);
+            if (channel == null) {
+                throw new ChannelNotFoundException("Aucun salon avec l'id : " + channelId + "n'a été trouvé");
+            }
+
+            User senderId = userService.getUser(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+
+            message.setChannel(channel)
+                    .setSender(senderId)
+                    .setSentTo(channelsUsersService.getUsers(channelId));
+
+            return messageRepository.save(message);
+        } catch (Exception e) {
+            throw new MessageSaveException("Erreur dans la sauvegarde du message : " + e.getMessage(), e);
+        }
     }
 
     @Override

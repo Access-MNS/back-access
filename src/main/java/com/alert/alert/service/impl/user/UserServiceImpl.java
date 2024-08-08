@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,8 +31,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUser(User user) {
-        if (userExists(user.getId())) {
-            userRepository.save(user);
+        Optional<User> optionalUser = this.userRepository.findById(user.getId());
+        if (optionalUser.isPresent()) {
+            optionalUser.get()
+                    .setFirstName(user.getFirstName())
+                    .setLastName(user.getLastName())
+                    .setMail(user.getMail());
+            userRepository.save(optionalUser.get());
             return true;
         }
         return false;

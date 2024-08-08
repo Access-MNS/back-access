@@ -3,6 +3,7 @@ package com.alert.alert.entity;
 import com.alert.alert.entity.enums.Role;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
